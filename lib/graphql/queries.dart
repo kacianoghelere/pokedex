@@ -1,6 +1,19 @@
+const String fetchFiltersDataQuery = r'''
+query GetFiltersData {
+  pokemon_v2_type {
+    id
+    name
+  }
+  pokemon_v2_generation {
+    id
+    name
+  }
+}
+''';
+
 const String fetchPokemonsQuery = r'''
-query GetPokemons {
-  pokemon_v2_pokemon {
+query GetPokemons($where: pokemon_v2_pokemon_bool_exp) {
+  pokemon_v2_pokemon(where: $where) {
     id
     name
     pokemon_v2_pokemontypes {
@@ -9,7 +22,13 @@ query GetPokemons {
       }
     }
     pokemon_v2_pokemonsprites {
-      sprites
+      sprites(path: "other.official-artwork.front_default")
+    }
+    pokemon_v2_pokemonspecy {
+      pokemon_v2_generation {
+        name
+        id
+      }
     }
   }
 }

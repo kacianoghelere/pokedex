@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pokedex/graphql/queries.dart';
-import 'package:pokedex/models/pokemon_model.dart';
+import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/utils/type_colors.dart';
 
 class PokemonDetailScreen extends StatelessWidget {

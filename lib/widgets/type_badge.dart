@@ -15,18 +15,27 @@ class TypeBadge extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          // decoration: const BoxDecoration(
-          //   borderRadius: BorderRadius.only(
-          //     bottomLeft: Radius.circular(2),
-          //     topLeft: Radius.circular(2)
-          //   ),
-          // ),
-          color: typeColor,
+          decoration: BoxDecoration(
+            color: typeColor,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(4),
+              topLeft: Radius.circular(4)
+            ),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: TypeIcon(type: type),
+          child: TypeIcon(
+            type: type,
+            style: const TextStyle(color: Colors.black)
+          ),
         ),
         Container(
-          color: HSLColor.fromColor(typeColor).withLightness(0.15).toColor(),
+          decoration: BoxDecoration(
+            color: HSLColor.fromColor(typeColor).withLightness(0.15).toColor(),
+            borderRadius: const BorderRadius.only(
+              bottomRight: Radius.circular(4),
+              topRight: Radius.circular(4)
+            ),
+          ),
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
           child: Text(
             type.toUpperCase(),

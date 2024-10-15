@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/utils/extensions/color.dart';
 
 class Theme {
-  static const color = Color.fromRGBO(204, 0, 0, 1);
+  static const primaryColor = Color.fromRGBO(204, 0, 0, 1);
 
-  static const materialColor = color.toMaterialColor();
+  static final materialColor = primaryColor.toMaterialColor();
 
-  static const theme = ThemeData(
-    appBarTheme: AppBarTheme(
-      backgroundColor: color
+  static final theme = ThemeData(
+    appBarTheme: const AppBarTheme(
+      backgroundColor: primaryColor
     ),
-    colorScheme: ColorScheme.fromSeed(seedColor: color),
+    colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
     primarySwatch: materialColor.toMaterialColor()
   );
 }

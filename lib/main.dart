@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:pokedex/models/pokemon_model.dart';
+import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
@@ -32,8 +32,22 @@ void main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  initState() {
+    super.initState();
+
+    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
+
+    filterProvider.fetchFilterData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +61,10 @@ class MyApp extends StatelessWidget {
       title: 'Pokédex',
       themeMode: themeProvider.mode,
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
+        appBarTheme: AppBarTheme(
+          backgroundColor: color
+        ),
+        scaffoldBackgroundColor: Colors.white12,
         primaryColor: materialColor
       ),
       theme: ThemeData(
@@ -54,6 +72,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: color
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: color),
+        primaryColor: color,
         primarySwatch: materialColor
       ),
       home: const HomeScreen(),
