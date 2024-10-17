@@ -27,6 +27,7 @@ class _EvolutionChainCarrouselState extends State<EvolutionChainCarrousel> {
   @override
   Widget build(BuildContext context) {
     final int itemCount = widget.evolutionChain.stages.length;
+
     return CustomScrollView(
       slivers: [
         SliverFillRemaining(

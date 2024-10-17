@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_details.dart';
@@ -42,7 +43,19 @@ class PokemonDetailScreen extends StatelessWidget {
             )
           ],
           backgroundColor: typeColor,
-          title: Text('#${pokemon.id} ${pokemon.name}'),
+          title: Text.rich(
+            TextSpan(
+              children: [
+                TextSpan(
+                  text: '#${pokemon.id} ',
+                ),
+                TextSpan(
+                  text: toBeginningOfSentenceCase(pokemon.name),
+                  style: const TextStyle(fontWeight: FontWeight.bold)
+                )
+              ]
+            )
+          ),
         ),
         body: FutureBuilder<QueryResult>(
           future: _fetchPokemonDetails(pokemon.id),
