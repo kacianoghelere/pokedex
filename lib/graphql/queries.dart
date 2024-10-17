@@ -13,22 +13,16 @@ query GetFiltersData {
 
 const String fetchPokemonsQuery = r'''
 query GetPokemons($where: pokemon_v2_pokemon_bool_exp) {
-  pokemon_v2_pokemon(where: $where) {
+  pokemon: pokemon_v2_pokemon(where: $where) {
     id
     name
-    pokemon_v2_pokemontypes {
-      pokemon_v2_type {
+    types: pokemon_v2_pokemontypes {
+      type: pokemon_v2_type {
         name
       }
     }
-    pokemon_v2_pokemonsprites {
-      sprites(path: "other.official-artwork.front_default")
-    }
-    pokemon_v2_pokemonspecy {
-      pokemon_v2_generation {
-        name
-        id
-      }
+    sprites: pokemon_v2_pokemonsprites {
+      front_default: sprites(path: "other.official-artwork.front_default")
     }
   }
 }
@@ -36,42 +30,86 @@ query GetPokemons($where: pokemon_v2_pokemon_bool_exp) {
 
 const String pokemonDetailQuery = r'''
 query GetPokemonDetails($id: Int!) {
-  pokemon_v2_pokemon_by_pk(id: $id) {
+  pokemon: pokemon_v2_pokemon_by_pk(id: $id) {
     id
     name
     height
     weight
     base_experience
-    pokemon_v2_pokemontypes {
-      pokemon_v2_type {
+    types: pokemon_v2_pokemontypes {
+      type: pokemon_v2_type {
         name
       }
     }
-    pokemon_v2_pokemonabilities {
-      pokemon_v2_ability {
+    abilities: pokemon_v2_pokemonabilities {
+      ability: pokemon_v2_ability {
         name
+        effects: pokemon_v2_abilityeffecttexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          effect
+        }
+        flavor_texts: pokemon_v2_abilityflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          flavor_text
+        }
       }
     }
-    pokemon_v2_pokemonstats {
+    stats: pokemon_v2_pokemonstats {
       base_stat
-      pokemon_v2_stat {
-        name
+      stat: pokemon_v2_stat {
+        stat_names: pokemon_v2_statnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          name
+        }
       }
     }
-    pokemon_v2_pokemonspecy {
-      evolves_from_species_id
-      evolution_chain_id
-      pokemon_v2_evolutionchain {
-        pokemon_v2_pokemonspecies {
+    moves: pokemon_v2_pokemonmoves_aggregate(where: {pokemon_v2_movelearnmethod: {name: {_eq: "level-up"}}}, distinct_on: move_id, order_by: {}) {
+      nodes {
+        move: pokemon_v2_move {
+          accuracy
           name
-          pokemon_v2_pokemons {
+          flavor_texts: pokemon_v2_moveflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+            flavor_text
+          }
+          move_names: pokemon_v2_movenames(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+            name
+          }
+          type: pokemon_v2_type {
+            name
+          }
+        }
+        level
+      }
+    }
+    species: pokemon_v2_pokemonspecy {
+      capture_rate
+      shape: pokemon_v2_pokemonshape {
+        name
+      }
+      color: pokemon_v2_pokemoncolor {
+        name
+      }
+      evolves_from_species_id
+      flavor_texts: pokemon_v2_pokemonspeciesflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+        flavor_text
+      }
+      evolution_chain: pokemon_v2_evolutionchain {
+        species: pokemon_v2_pokemonspecies {
+          name
+          pokemons: pokemon_v2_pokemons {
             id
-            pokemon_v2_pokemonsprites {
-              sprites(path: "other.official-artwork.front_default")
+            name
+            types: pokemon_v2_pokemontypes {
+              type: pokemon_v2_type {
+                name
+              }
+            }
+            sprites: pokemon_v2_pokemonsprites {
+              front_default: sprites(path: "other.official-artwork.front_default")
             }
           }
         }
       }
+    }
+    sprites: pokemon_v2_pokemonsprites {
+      front_default: sprites(path: "other.official-artwork.front_default")
     }
   }
 }

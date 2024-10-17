@@ -12,42 +12,38 @@ class PokemonTypeBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     Color typeColor = getTypeColor(type);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
+    return Stack(
       children: [
-        Container(
-          decoration: BoxDecoration(
-            color: typeColor,
-            borderRadius: const BorderRadius.only(
-              bottomLeft: Radius.circular(4),
-              topLeft: Radius.circular(4)
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 4.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color: HSLColor.fromColor(typeColor).withLightness(0.3).toColor(),
+              borderRadius: BorderRadius.circular(4.0)
             ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: PokemonTypeImage(
-            PokemonTypeEnum.parse(type),
-            height: 20,
-            width: 20
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 22.0),
+              child: Text(
+                type.toUpperCase(),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                )
+              ),
+            )
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: HSLColor.fromColor(typeColor).withLightness(0.3).toColor(),
-            borderRadius: const BorderRadius.only(
-              bottomRight: Radius.circular(4),
-              topRight: Radius.circular(4)
-            ),
-          ),
-          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: Text(
-            type.toUpperCase(),
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            )
+        Positioned(
+          left: 0,
+          top: 5,
+          child: PokemonTypeImage(
+            PokemonTypeEnum.parse(type),
+            height: 26,
+            width: 26
           )
         )
-      ],
+      ]
     );
   }
 }

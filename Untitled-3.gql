@@ -1,0 +1,154 @@
+
+
+# Query velha
+query GetPokemonDetails($id: Int!) {
+  pokemon_v2_pokemon_by_pk(id: $id) {
+    id
+    name
+    height
+    weight
+    base_experience
+    pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
+    pokemon_v2_pokemonabilities {
+      pokemon_v2_ability {
+        name
+      }
+    }
+    pokemon_v2_pokemonstats {
+      base_stat
+      pokemon_v2_stat {
+        pokemon_v2_statnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          name
+        }
+      }
+    }
+    moves: pokemon_v2_pokemonmoves_aggregate(where: {pokemon_v2_movelearnmethod: {name: {_eq: "level-up"}}}, distinct_on: move_id) {
+      nodes {
+        move: pokemon_v2_move {
+          name
+        }
+        level
+      }
+    }
+    pokemon_v2_pokemonspecy {
+      capture_rate
+      evolves_from_species_id
+      pokemon_v2_pokemonspeciesflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+        flavor_text
+      }
+      pokemon_v2_evolutionchain {
+        pokemon_v2_pokemonspecies {
+          name
+          pokemon_v2_pokemons {
+            id
+            name
+            pokemon_v2_pokemonsprites {
+              sprites(path: "other.official-artwork.front_default")
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+# Query nova
+
+query GetPokemonDetails($id: Int!) {
+  pokemon: pokemon_v2_pokemon_by_pk(id: $id) {
+    id
+    name
+    height
+    weight
+    base_experience
+    types: pokemon_v2_pokemontypes {
+      pokemon_v2_type {
+        name
+      }
+    }
+    abilities: pokemon_v2_pokemonabilities {
+      ability: pokemon_v2_ability {
+        name
+      }
+    }
+    stats: pokemon_v2_pokemonstats {
+      base_stat
+      stat: pokemon_v2_stat {
+        stat_names: pokemon_v2_statnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+          name
+        }
+      }
+    }
+    moves: pokemon_v2_pokemonmoves_aggregate(where: {pokemon_v2_movelearnmethod: {name: {_eq: "level-up"}}}, distinct_on: move_id) {
+      nodes {
+        move: pokemon_v2_move {
+          accuracy
+          flavor_texts: pokemon_v2_moveflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+            flavor_text
+          }
+          move_names: pokemon_v2_movenames(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+            name
+          }
+          type: pokemon_v2_type {
+            name
+          }
+        }
+        level
+      }
+    }
+    specy: pokemon_v2_pokemonspecy {
+      capture_rate
+      evolves_from_species_id
+      flavor_texts: pokemon_v2_pokemonspeciesflavortexts(limit: 1, where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+        flavor_text
+      }
+      evolution_chain: pokemon_v2_evolutionchain {
+        species: pokemon_v2_pokemonspecies {
+          name
+          pokemons: pokemon_v2_pokemons {
+            id
+            name
+            sprites: pokemon_v2_pokemonsprites {
+              sprites(path: "other.official-artwork.front_default")
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+# Outra API
+
+query {
+ 	pokemon(name: "raichu") {
+    name
+    stats {
+      base_stat
+      stat {
+        name
+      }
+    }
+    species {
+      name
+    }
+    height
+    weight
+    message
+    types {
+      type {
+        name
+      }
+    }
+    sprites {
+      front_default
+      front_female
+      back_default
+      back_female
+    }
+  }
+}

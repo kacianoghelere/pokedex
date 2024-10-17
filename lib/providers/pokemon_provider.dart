@@ -67,7 +67,7 @@ class PokemonProvider with ChangeNotifier {
       return;
     }
 
-    _pokemons = (result.data?['pokemon_v2_pokemon'] as List)
+    _pokemons = (result.data?['pokemon'] as List)
       .map((data) => Pokemon.fromJson(data))
       .toList();
 

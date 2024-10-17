@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/utils/extensions/color.dart';
+import 'package:pokedex/utils/extensions/color_extension.dart';
 
 class Theme {
   static const primaryColor = Color.fromRGBO(204, 0, 0, 1);

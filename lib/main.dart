@@ -6,7 +6,7 @@ import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/screens/home_screen.dart';
-import 'package:pokedex/utils/extensions/color.dart';
+import 'package:pokedex/utils/extensions/color_extension.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

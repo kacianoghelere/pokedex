@@ -27,13 +27,14 @@ class Pokemon {
     this.isFavorite = false,
   });
 
-  Pokemon.fromJson(Map<String, dynamic> json):
-    this(
+  factory Pokemon.fromJson(Map<String, dynamic> json) {
+    return Pokemon(
       id: json['id'],
       name: json['name'],
-      types: (json['pokemon_v2_pokemontypes'] as List)
-        .map((t) => t['pokemon_v2_type']['name'] as String)
+      types: (json['types'] as List)
+        .map((t) => t['type']['name'] as String)
         .toList(),
-      sprite: json['pokemon_v2_pokemonsprites'][0]['sprites'] ?? ''
+      sprite: json['sprites'][0]['front_default'] ?? ''
     );
+  }
 }
