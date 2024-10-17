@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/widgets/generation_filter.dart';
-import 'package:pokedex/widgets/types_filter.dart';
+import 'package:pokedex/widgets/pokemon_types_filter.dart';
 import 'package:provider/provider.dart';
 
 class Filters extends StatelessWidget {
@@ -25,7 +25,7 @@ class Filters extends StatelessWidget {
             const SizedBox(height: 16),
             const GenerationFilter(),
             const SizedBox(height: 16),
-            const TypesFilter(),
+            const PokemonTypesFilter(),
             const SizedBox(height: 16),
             Consumer2<PokemonProvider, FilterProvider>(
               builder: (context, pokemonProvider, filterProvider, _) {

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -43,6 +44,10 @@ class FilterProvider with ChangeNotifier {
     _types = (result.data?['pokemon_v2_type'] as List)
       .map((data) => PokemonType.fromJson(data))
       .toList();
+
+    if (kDebugMode) {
+      debugPrint(_types.map((type) => type.type).toList().toString());
+    }
 
     _generations = (result.data?['pokemon_v2_generation'] as List)
       .map((data) => Generation.fromJson(data))

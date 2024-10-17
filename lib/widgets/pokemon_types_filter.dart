@@ -3,17 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/providers/filter_provider.dart';
+import 'package:pokedex/utils/enums/pokemon_type.dart';
+import 'package:pokedex/widgets/pokemon_type_icon.dart';
 import 'package:provider/provider.dart';
 
-class TypesFilter extends StatefulWidget {
-  const TypesFilter({super.key});
+class PokemonTypesFilter extends StatelessWidget {
+  const PokemonTypesFilter({super.key});
 
-  @override
-  State<TypesFilter> createState() => _TypesFilterState();
-}
-
-class _TypesFilterState extends State<TypesFilter> {
-  List<DropdownItem<PokemonType>> _getDropdownItems() {
+  List<DropdownItem<PokemonType>> _getDropdownItems(BuildContext context) {
     var pokemonTypes = Provider.of<FilterProvider>(context).types;
 
     return pokemonTypes.map((type) {
@@ -41,21 +38,20 @@ class _TypesFilterState extends State<TypesFilter> {
         Consumer<FilterProvider>(
           builder: (context, filterProvider, _) {
             return MultiDropdown<PokemonType>(
-              items: _getDropdownItems(),
+              items: _getDropdownItems(context),
               controller: filterProvider.pokemonTypesController,
               enabled: true,
               searchEnabled: true,
               chipDecoration: ChipDecoration(
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                 borderRadius: BorderRadius.circular(8),
-                wrap: true,
+                wrap: false,
                 runSpacing: 2,
                 spacing: 10,
               ),
               fieldDecoration: FieldDecoration(
                 hintText: label,
                 hintStyle: const TextStyle(color: Colors.black45),
-                // prefixIcon: const Icon(Icons.ac_unit, color: Colors.black45),
                 showClearIcon: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
@@ -68,6 +64,22 @@ class _TypesFilterState extends State<TypesFilter> {
                   ),
                 ),
               ),
+              itemBuilder: (item, index, onTap) {
+                return ListTile(
+                  leading: PokemonTypeImage(
+                    PokemonTypeEnum.parse(item.value.type),
+                    height: 24,
+                    width: 24
+                  ),
+                  selected: item.selected,
+                  onTap: onTap,
+                  title: Text(item.label),
+                  trailing: item.selected
+                    ? const Icon(Icons.check_box)
+                    : null,
+                );
+              },
+              itemSeparator: const Divider(),
               dropdownItemDecoration: DropdownItemDecoration(
                 selectedIcon: Icon(
                   Icons.check_box,

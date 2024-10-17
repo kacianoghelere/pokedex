@@ -1,4 +1,4 @@
-String getTypeIcon(String type) {
+String getTypeTextIcon(String type) {
   return switch (type.toLowerCase()) {
     'bug' => 'A',
     'dark' => 'B',

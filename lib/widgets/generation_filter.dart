@@ -48,7 +48,7 @@ class _GenerationFilterState extends State<GenerationFilter> {
               chipDecoration: ChipDecoration(
                 backgroundColor: Theme.of(context).colorScheme.inversePrimary,
                 borderRadius: BorderRadius.circular(8),
-                wrap: true,
+                wrap: false,
                 runSpacing: 2,
                 spacing: 10,
               ),

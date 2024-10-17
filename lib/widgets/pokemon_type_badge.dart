@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/utils/type_colors.dart';
-import 'package:pokedex/widgets/type_icon.dart';
+import 'package:pokedex/utils/enums/pokemon_type.dart';
+import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:pokedex/widgets/pokemon_type_icon.dart';
 
-class TypeBadge extends StatelessWidget {
+class PokemonTypeBadge extends StatelessWidget {
   final String type;
 
-  const TypeBadge({super.key, required this.type});
+  const PokemonTypeBadge({super.key, required this.type});
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +24,15 @@ class TypeBadge extends StatelessWidget {
             ),
           ),
           padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-          child: TypeIcon(
-            type: type,
-            style: const TextStyle(color: Colors.black)
+          child: PokemonTypeImage(
+            PokemonTypeEnum.parse(type),
+            height: 20,
+            width: 20
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: HSLColor.fromColor(typeColor).withLightness(0.15).toColor(),
+            color: HSLColor.fromColor(typeColor).withLightness(0.3).toColor(),
             borderRadius: const BorderRadius.only(
               bottomRight: Radius.circular(4),
               topRight: Radius.circular(4)

@@ -15,7 +15,10 @@ enum PokemonTypeEnum {
   poison,
   psychic,
   rock,
+  shadow,
   steel,
+  stellar,
+  unknown,
   water;
 
   static PokemonTypeEnum parse(String pokemonType) {
@@ -36,9 +39,12 @@ enum PokemonTypeEnum {
       'poison' => PokemonTypeEnum.poison,
       'psychic' => PokemonTypeEnum.psychic,
       'rock' => PokemonTypeEnum.rock,
+      'shadow' => PokemonTypeEnum.shadow,
       'steel' => PokemonTypeEnum.steel,
+      'stellar' => PokemonTypeEnum.stellar,
+      'unknown' => PokemonTypeEnum.unknown,
       'water' => PokemonTypeEnum.water,
-      _ => throw ArgumentError('Invalid pokemonType name')
+      _ => PokemonTypeEnum.unknown
     };
   }
 }
@@ -62,7 +68,10 @@ extension PokemonTypeExtension on PokemonTypeEnum {
       PokemonTypeEnum.poison => 'poison',
       PokemonTypeEnum.psychic => 'psychic',
       PokemonTypeEnum.rock => 'rock',
+      PokemonTypeEnum.shadow => 'shadow',
       PokemonTypeEnum.steel => 'steel',
+      PokemonTypeEnum.stellar => 'stellar',
+      PokemonTypeEnum.unknown => 'unknown',
       PokemonTypeEnum.water => 'water'
     };
   }

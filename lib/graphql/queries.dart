@@ -58,7 +58,7 @@ query GetPokemonDetails($id: Int!) {
         name
       }
     }
-    pokemon_v2_pokemonspecies {
+    pokemon_v2_pokemonspecy {
       evolves_from_species_id
       evolution_chain_id
       pokemon_v2_evolutionchain {
@@ -67,7 +67,7 @@ query GetPokemonDetails($id: Int!) {
           pokemon_v2_pokemons {
             id
             pokemon_v2_pokemonsprites {
-              sprites
+              sprites(path: "other.official-artwork.front_default")
             }
           }
         }

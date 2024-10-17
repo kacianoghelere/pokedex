@@ -94,7 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.small(
+        backgroundColor: Theme.of(context).primaryColor,
+        shape: const CircleBorder(),
         onPressed: () {
           showModalBottomSheet(
             context: context,
@@ -103,8 +105,11 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           );
         },
-        backgroundColor: Theme.of(context).primaryColor,
-        child: const Icon(Icons.filter_list_alt)
+        elevation: 9,
+        child: Icon(
+          Icons.filter_list_sharp,
+          color: Theme.of(context).iconTheme.color
+        ),
       ),
     );
   }

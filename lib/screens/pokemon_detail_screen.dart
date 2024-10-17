@@ -1,8 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/utils/type_colors.dart';
+import 'package:pokedex/providers/pokemon_provider.dart';
+import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:provider/provider.dart';
 
 class PokemonDetailScreen extends StatelessWidget {
   final Pokemon pokemon;
@@ -11,52 +14,106 @@ class PokemonDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final typeColor = getTypeColor(pokemon.types.first);
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(
+              iconSize: 20,
+              icon: Icon(
+                pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red,
+              ),
+              onPressed: () {
+                Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
+              },
+              padding: EdgeInsets.zero
+            )
+          ],
+          backgroundColor: typeColor,
           title: Text('#${pokemon.id} ${pokemon.name}'),
-          backgroundColor: getTypeColor(pokemon.types.first),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Sobre'),
-              Tab(text: 'Atributos'),
-              Tab(text: 'Evoluções'),
-            ]
-          )
         ),
-        body: Column(
-          children: [
-            Image.network(pokemon.sprite),
-            FutureBuilder<QueryResult>(
-              future: _fetchPokemonDetails(pokemon.id),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+        body: FutureBuilder<QueryResult>(
+          future: _fetchPokemonDetails(pokemon.id),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-                if (snapshot.hasError || snapshot.data == null) {
-                  return const Center(child: Text('Erro ao carregar dados.'));
-                }
+            if (snapshot.hasError || snapshot.data == null) {
+              return const Center(child: Text('Error while loading pokemon data'));
+            }
 
-                final data = snapshot.data!.data!['pokemon_v2_pokemon_by_pk'];
+            final data = snapshot.data!.data!['pokemon_v2_pokemon_by_pk'];
 
-                return Column(
-                  children: [
-                    TabBarView(
+            return NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) => [
+                SliverToBoxAdapter(
+                  child: ColoredBox(
+                    color: typeColor,
+                    child: Column(
                       children: [
-                        _aboutTab(data),
-                        _baseStatsTab(data['pokemon_v2_pokemonstats']),
-                        _evolutionTab(data['pokemon_v2_pokemonspecies']
-                            ['pokemon_v2_evolutionchain']),
+                        CachedNetworkImage(
+                          placeholder: (context, url) {
+                            return const SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                          imageUrl: pokemon.sprite,
+                          width: 150,
+                          height: 150,
+                        ),
+                        Stack(
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 200,
+                              child: ColoredBox(color: typeColor),
+                            ),
+                            SizedBox(
+                              height: 24,
+                              width: 200,
+                              child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                  color: typeColor,
+                                  borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+                  ),
+                ),
+                const SliverToBoxAdapter(
+                  child: TabBar(
+                    tabs: [
+                      Tab(text: 'About'),
+                      Tab(text: 'Attributes'),
+                      Tab(text: 'Evolutions'),
+                    ],
+                  ),
+                ),
+              ],
+              body: TabBarView(
+                children: [
+                  _aboutTab(data),
+                  _baseStatsTab(data['pokemon_v2_pokemonstats']),
+                  _evolutionTab(data['pokemon_v2_pokemonspecy']['pokemon_v2_evolutionchain']),
+                ],
+              ),
+            );
+          },
+        )
       ),
     );
   }
@@ -78,16 +135,16 @@ class PokemonDetailScreen extends StatelessWidget {
         .map((e) => e['pokemon_v2_ability']['name'])
         .join(', ');
 
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
+    return TabWrapper(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _detailRow('Altura', '${data['height'] / 10} m'),
-          _detailRow('Peso', '${data['weight'] / 10} kg'),
-          _detailRow('Experiência Base', '${data['base_experience']}'),
-          _detailRow('Habilidades', abilities),
-        ],
+          _detailRow('Height', '${data['height'] / 10}m'),
+          _detailRow('Weight', '${data['weight'] / 10}kg'),
+          _detailRow('Base Experience', '${data['base_experience']}'),
+          _detailRow('Abilities', abilities),
+          const SizedBox(width: 300, height: 700, child: ColoredBox(color: Colors.red))
+        ]
       ),
     );
   }
@@ -155,6 +212,22 @@ class PokemonDetailScreen extends StatelessWidget {
           Expanded(child: Text(value)),
         ],
       ),
+    );
+  }
+}
+
+class TabWrapper extends StatelessWidget {
+  final Widget child;
+
+  const TabWrapper({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: child
+      )
     );
   }
 }

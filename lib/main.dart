@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     var color = const Color.fromRGBO(204, 0, 0, 1);
 
-    var materialColor = color.toMaterialColor();
+    var darkColor = HSLColor.fromColor(color).withLightness(0.25).toColor();
 
     final themeProvider = Provider.of<ThemeProvider>(context);
 
@@ -62,10 +62,13 @@ class _MyAppState extends State<MyApp> {
       themeMode: themeProvider.mode,
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(
         appBarTheme: AppBarTheme(
-          backgroundColor: color
+          backgroundColor: darkColor,
         ),
-        scaffoldBackgroundColor: Colors.white12,
-        primaryColor: materialColor
+        bottomSheetTheme: const BottomSheetThemeData(
+          backgroundColor: Colors.black
+        ),
+        colorScheme: ColorScheme.fromSeed(seedColor: color),
+        primaryColor: darkColor.toMaterialColor(),
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(
@@ -73,7 +76,7 @@ class _MyAppState extends State<MyApp> {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: color),
         primaryColor: color,
-        primarySwatch: materialColor
+        primarySwatch: color.toMaterialColor(),
       ),
       home: const HomeScreen(),
     );
