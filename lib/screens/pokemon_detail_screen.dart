@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/utils/enums/pokemon_type.dart';
 import 'package:pokedex/utils/format_helper.dart';
 import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:pokedex/utils/services/pokemon_service.dart';
 import 'package:pokedex/widgets/evolution_chain_carousel.dart';
 import 'package:pokedex/widgets/pokemon_type_icon.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +58,7 @@ class PokemonDetailScreen extends StatelessWidget {
           ),
         ),
         body: FutureBuilder<QueryResult>(
-          future: _fetchPokemonDetails(pokemon.id),
+          future: PokemonService.fetchDetails(pokemon.id),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -141,18 +141,6 @@ class PokemonDetailScreen extends StatelessWidget {
         )
       ),
     );
-  }
-
-  Future<QueryResult> _fetchPokemonDetails(int id) async {
-    final client = GraphQLClient(
-      link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
-      cache: GraphQLCache(),
-    );
-
-    return await client.query(QueryOptions(
-      document: gql(pokemonDetailQuery),
-      variables: {'id': id},
-    ));
   }
 
   Widget _baseStatsTab(List<dynamic> stats) {
@@ -253,7 +241,7 @@ class AboutTab extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(bottom: 8.0),
             child: Text(
-              'Basic Stats',
+              'Basic Info',
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 fontWeight: FontWeight.bold
               )

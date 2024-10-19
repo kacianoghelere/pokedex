@@ -1,10 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:hive/hive.dart';
-import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/generation.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_type.dart';
+import 'package:pokedex/utils/services/pokemon_service.dart';
 
 class PokemonProvider with ChangeNotifier {
   final Box<Pokemon> _favoritesBox = Hive.box<Pokemon>('favorite_pokemons');
@@ -18,10 +17,8 @@ class PokemonProvider with ChangeNotifier {
     required List<Generation> generations,
     required List<PokemonType> pokemonTypes
   }) async {
-    // Build the `where` filter dynamically
     final Map<String, dynamic> where = {};
 
-    // Add generation filter only if `generationIds` is not empty
     if (generations.isNotEmpty) {
       var generationIds = generations.map((item) => item.id).toList();
 
@@ -30,7 +27,6 @@ class PokemonProvider with ChangeNotifier {
       };
     }
 
-    // Add type filter only if `types` is not empty
     if (pokemonTypes.isNotEmpty) {
       var types = pokemonTypes.map((item) => item.type).toList();
 
@@ -43,21 +39,7 @@ class PokemonProvider with ChangeNotifier {
       debugPrint("fetchPokemons params ${where.toString()}");
     }
 
-    // Initialize GraphQL client
-    final client = GraphQLClient(
-      link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
-      cache: GraphQLCache(),
-    );
-
-    // Execute the query with the dynamically built `where` filter
-    final QueryOptions options = QueryOptions(
-      document: gql(fetchPokemonsQuery),
-      variables: {
-        'where': where.isEmpty ? null : where
-      }
-    );
-
-    final result = await client.query(options);
+    final result = await PokemonService.fetchList(where);
 
     if (result.hasException) {
       if (kDebugMode) {

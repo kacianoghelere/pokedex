@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
+import 'package:pokedex/utils/services/pokemon_service.dart';
 
 class FilterProvider with ChangeNotifier {
   bool _showFavoritesOnly = false;
@@ -26,14 +24,7 @@ class FilterProvider with ChangeNotifier {
   bool get showFavoritesOnly => _showFavoritesOnly;
 
   Future<void> fetchFilterData() async {
-    final client = GraphQLClient(
-      link: HttpLink('https://beta.pokeapi.co/graphql/v1beta'),
-      cache: GraphQLCache(),
-    );
-
-    final result = await client.query(QueryOptions(
-      document: gql(fetchFiltersDataQuery)
-    ));
+    final result = await PokemonService.fetchFilters();
 
     if (result.hasException) {
       print("ERROR ${result.exception}");
