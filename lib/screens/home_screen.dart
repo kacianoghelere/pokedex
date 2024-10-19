@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/widgets/filters.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
+import 'package:pokedex/widgets/show_favorites_button.dart';
+import 'package:pokedex/widgets/toggle_theme_button.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,10 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filterProvider = Provider.of<FilterProvider>(context);
-
-    final themeProvider = Provider.of<ThemeProvider>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Pokédex'),
@@ -53,30 +50,9 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ]
           ),
-        actions: [
-          IconButton(
-            icon: Icon(
-              color: Theme.of(context).iconTheme.color,
-              filterProvider.showFavoritesOnly
-                  ? Icons.favorite
-                  : Icons.favorite_border,
-            ),
-            onPressed: () {
-              filterProvider.toggleFavoritesOnly();
-            },
-          ),
-          IconButton(
-            color: Theme.of(context).iconTheme.color,
-            key: const Key('TOGGLE_THEME'),
-            icon: Icon(
-              themeProvider.mode == ThemeMode.dark
-                ? Icons.light_mode
-                : Icons.dark_mode,
-            ),
-            onPressed: () {
-              themeProvider.toggleMode();
-            },
-          ),
+        actions: const [
+          ShowFavoritesButton(),
+          ThemeToggleButton(),
         ],
       ),
       body: const SafeArea(
