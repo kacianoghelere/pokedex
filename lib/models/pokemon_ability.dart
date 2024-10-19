@@ -1,4 +1,4 @@
-import 'package:pokedex/utils/format_helper.dart';
+import 'package:pokedex/utils/helpers/flavor_text_helper.dart';
 
 class PokemonAbility {
   final String name;
@@ -12,10 +12,21 @@ class PokemonAbility {
   });
 
   factory PokemonAbility.fromJson(Map<String, dynamic> json) {
+    final ability = json['ability'];
+
     return PokemonAbility (
-      name: json['ability']['name'],
-      flavorText: formatFlavorText(json['ability']['flavor_texts'][0]['flavor_text']),
-      effect: formatFlavorText(json['ability']['effects'][0]['effect'])
+      name: ability['name'],
+      flavorText: FlavorTextHelper.extract(ability),
+      effect: FlavorTextHelper.extract(
+        ability,
+        collection: 'effects',
+        key: 'effect'
+      )
     );
+  }
+
+  @override
+  String toString() {
+    return name;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:pokedex/utils/enums/pokemon_type.dart';
-import 'package:pokedex/utils/format_helper.dart';
+import 'package:pokedex/utils/helpers/flavor_text_helper.dart';
 
 class PokemonMove {
   final String name;
@@ -21,7 +21,7 @@ class PokemonMove {
 
     return PokemonMove(
       name: move['name'],
-      flavorText: formatFlavorText(move['flavor_texts'][0]['flavor_text']),
+      flavorText: FlavorTextHelper.extract(move),
       accuracy: move['accuracy'],
       level: json['level'],
       type: PokemonTypeEnum.parse(move['type']['name'])

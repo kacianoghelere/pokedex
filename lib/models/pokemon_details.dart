@@ -3,8 +3,10 @@ import 'package:pokedex/models/pokemon_ability.dart';
 import 'package:pokedex/models/pokemon_evolution_chain.dart';
 import 'package:pokedex/models/pokemon_move.dart';
 import 'package:pokedex/models/pokemon_stat.dart';
+import 'package:pokedex/utils/helpers/flavor_text_helper.dart';
 
 class PokemonDetails extends Pokemon {
+  final String description;
   final int baseExperience;
   final int height;
   final int weight;
@@ -20,6 +22,7 @@ class PokemonDetails extends Pokemon {
     required super.sprite,
     required super.isFavorite,
     required this.baseExperience,
+    required this.description,
     required this.height,
     required this.weight,
     required this.moves,
@@ -37,6 +40,7 @@ class PokemonDetails extends Pokemon {
         .toList(),
       sprite: json['sprites'][0]['front_default'] ?? '',
       isFavorite: false,
+      description: FlavorTextHelper.extract(json['species']),
       baseExperience: json['base_experience'],
       height: json['height'],
       weight: json['weight'],
@@ -46,7 +50,7 @@ class PokemonDetails extends Pokemon {
       abilities: (json['abilities'] as List)
         .map((data) => PokemonAbility.fromJson(data))
         .toList(),
-      stats: (json['stats'] as List)
+      stats: (json['stats']['nodes'] as List)
         .map((data) => PokemonStat.fromJson(data))
         .toList(),
       evolutionChain: PokemonEvolutionChain.fromJson(json['species']['evolution_chain'])

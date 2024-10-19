@@ -5,12 +5,11 @@ import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/utils/enums/pokemon_type.dart';
-import 'package:pokedex/utils/format_helper.dart';
 import 'package:pokedex/utils/pokemon_type_colors.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
+import 'package:pokedex/widgets/pokemon_info_tab.dart';
 import 'package:pokedex/widgets/evolution_chain_carousel.dart';
-import 'package:pokedex/widgets/pokemon_type_icon.dart';
+import 'package:pokedex/widgets/pokemon_moves_tab.dart';
 import 'package:provider/provider.dart';
 
 class PokemonDetailScreen extends StatelessWidget {
@@ -26,7 +25,7 @@ class PokemonDetailScreen extends StatelessWidget {
     final typeColor = getTypeColor(pokemon.types.first);
 
     return DefaultTabController(
-      length: 4,
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           actions: [
@@ -75,8 +74,18 @@ class PokemonDetailScreen extends StatelessWidget {
             return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverToBoxAdapter(
-                  child: ColoredBox(
-                    color: typeColor,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          typeColor,
+                          typeColor,
+                          HSLColor.fromColor(typeColor).withLightness(0.5).toColor(),
+                        ],
+                      )
+                    ),
                     child: Column(
                       children: [
                         CachedNetworkImage(
@@ -120,8 +129,7 @@ class PokemonDetailScreen extends StatelessWidget {
                 const SliverToBoxAdapter(
                   child: TabBar(
                     tabs: [
-                      Tab(text: 'About'),
-                      Tab(text: 'Attributes'),
+                      Tab(text: 'Info'),
                       Tab(text: 'Moves'),
                       Tab(text: 'Evolutions'),
                     ],
@@ -130,164 +138,14 @@ class PokemonDetailScreen extends StatelessWidget {
               ],
               body: TabBarView(
                 children: [
-                  AboutTab(data: pokemonData, pokemon: pokemon),
-                  _baseStatsTab(pokemonData['stats']),
-                  MovesTab(moves: pokemonData['moves']['nodes']),
+                  PokemonInfoTab(pokemon: pokemonDetails),
+                  PokemonMovesTab(pokemon: pokemonDetails),
                   EvolutionChainCarrousel(evolutionChain: pokemonDetails.evolutionChain)
                 ],
               ),
             );
           },
         )
-      ),
-    );
-  }
-
-  Widget _baseStatsTab(List<dynamic> stats) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: stats.map((stat) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 4.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(stat['stat']['stat_names'][0]['name']),
-                Text(stat['base_stat'].toString()),
-              ],
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-}
-
-class TabWrapper extends StatelessWidget {
-  final Widget child;
-
-  const TabWrapper({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: child
-      )
-    );
-  }
-}
-
-class DetailRow extends StatelessWidget {
-  final String label;
-  final String value;
-
-  const DetailRow({super.key, required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    final textStyle = Theme.of(context).textTheme.bodyLarge;
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4.0),
-      child: Row(
-        children: [
-          Text(
-            '$label: ',
-            style: textStyle!.copyWith(fontWeight: FontWeight.bold)
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: textStyle
-            )
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class AboutTab extends StatelessWidget {
-  final Pokemon pokemon;
-  final Map<String, dynamic> data;
-
-  const AboutTab({
-    super.key,
-    required this.pokemon,
-    required this.data
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final abilities = (data['abilities'] as List)
-      .map((e) => e['ability']['name'])
-      .join(', ');
-
-    return TabWrapper(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            data['species']['flavor_texts'][0]['flavor_text'].toString().replaceAll('\n', ' '),
-            style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-              fontStyle: FontStyle.italic
-            )
-          ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Text(
-              'Basic Info',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                fontWeight: FontWeight.bold
-              )
-            ),
-          ),
-          DetailRow(label: 'Height', value: '${data['height'] / 10}m'),
-          DetailRow(label: 'Weight', value: '${data['weight'] / 10}kg'),
-          DetailRow(label: 'Base Experience', value: '${data['base_experience']}'),
-          DetailRow(label: 'Abilities', value: abilities)
-        ]
-      ),
-    );
-  }
-}
-
-class MovesTab extends StatelessWidget {
-  final List<dynamic> moves;
-
-  const MovesTab({
-    super.key,
-    required this.moves
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: moves.map((item) {
-          return ListTile(
-            leading: PokemonTypeImage(
-              PokemonTypeEnum.parse(item['move']['type']['name']),
-              height: 24,
-              width: 24,
-            ),
-            title: Text(
-              item['move']['name'],
-              style: const TextStyle(fontWeight: FontWeight.bold)
-            ),
-            subtitle: Text(
-              formatFlavorText(item['move']['flavor_texts'][0]['flavor_text']),
-              style: const TextStyle(fontStyle: FontStyle.italic)
-            ),
-            trailing: Text(item['level'].toString()),
-          );
-        }).toList(),
       ),
     );
   }
