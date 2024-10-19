@@ -50,7 +50,7 @@ class PokemonDetails extends Pokemon {
       abilities: (json['abilities'] as List)
         .map((data) => PokemonAbility.fromJson(data))
         .toList(),
-      stats: (json['stats']['nodes'] as List)
+      stats: (json['stats'] as List)
         .map((data) => PokemonStat.fromJson(data))
         .toList(),
       evolutionChain: PokemonEvolutionChain.fromJson(json['species']['evolution_chain'])

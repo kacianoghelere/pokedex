@@ -9,7 +9,7 @@ class PokemonStat {
 
   factory PokemonStat.fromJson(Map<String, dynamic> json) {
     return PokemonStat(
-      name: json['stat']['stat_names'][0]['name'],
+      name: json['stat']['name'],
       value: json['base_stat']
     );
   }
