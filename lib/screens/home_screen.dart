@@ -3,7 +3,7 @@ import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/widgets/filters.dart';
-import 'package:pokedex/widgets/pokemon_card.dart';
+import 'package:pokedex/widgets/pokemon_list.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,15 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pokemonProvider = Provider.of<PokemonProvider>(context);
-
     final filterProvider = Provider.of<FilterProvider>(context);
 
     final themeProvider = Provider.of<ThemeProvider>(context);
-
-    final pokemons = filterProvider.showFavoritesOnly
-        ? pokemonProvider.favorites
-        : pokemonProvider.pokemons;
 
     return Scaffold(
       appBar: AppBar(
@@ -85,14 +79,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SafeArea(
-        child: ListView.builder(
-          itemCount: pokemons.length,
-          itemBuilder: (context, index) {
-            final pokemon = pokemons[index];
-            return PokemonCard(pokemon: pokemon);
-          },
-        ),
+      body: const SafeArea(
+        child: PokemonList()
       ),
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: Theme.of(context).primaryColor,
