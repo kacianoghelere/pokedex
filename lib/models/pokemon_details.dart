@@ -3,7 +3,7 @@ import 'package:pokedex/models/pokemon_ability.dart';
 import 'package:pokedex/models/pokemon_evolution_chain.dart';
 import 'package:pokedex/models/pokemon_move.dart';
 import 'package:pokedex/models/pokemon_stat.dart';
-import 'package:pokedex/utils/helpers/flavor_text_helper.dart';
+import 'package:pokedex/utils/helpers/format_text_helper.dart';
 
 class PokemonDetails extends Pokemon {
   final String description;
@@ -40,7 +40,7 @@ class PokemonDetails extends Pokemon {
         .toList(),
       sprite: json['sprites'][0]['front_default'] ?? '',
       isFavorite: false,
-      description: FlavorTextHelper.extract(json['species']),
+      description: FormatTextHelper.formatFlavorText(json['species']),
       baseExperience: json['base_experience'],
       height: json['height'],
       weight: json['weight'],

@@ -1,3 +1,5 @@
+import 'package:pokedex/utils/helpers/format_text_helper.dart';
+
 class PokemonStat {
   final String name;
   final int value;
@@ -9,7 +11,7 @@ class PokemonStat {
 
   factory PokemonStat.fromJson(Map<String, dynamic> json) {
     return PokemonStat(
-      name: json['stat']['name'],
+      name: FormatTextHelper.formatName(json['stat']['name']),
       value: json['base_stat']
     );
   }

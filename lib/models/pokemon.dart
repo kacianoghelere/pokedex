@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:pokedex/utils/pokemon_type_colors.dart';
 
 part 'pokemon.g.dart';
 
@@ -36,5 +38,9 @@ class Pokemon {
         .toList(),
       sprite: json['sprites'][0]['front_default'] ?? ''
     );
+  }
+
+  Color get typeColor {
+    return getTypeColor(types[0]);
   }
 }

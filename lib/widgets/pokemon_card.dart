@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
-import 'package:pokedex/screens/pokemon_detail_screen.dart';
+import 'package:pokedex/screens/pokemon_details_screen.dart';
 import 'package:pokedex/utils/pokemon_type_colors.dart';
 import 'package:pokedex/widgets/pokemon_type_badge.dart';
 import 'package:provider/provider.dart';
@@ -24,7 +24,7 @@ class PokemonCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => PokemonDetailScreen(pokemon: pokemon)
+            builder: (context) => PokemonDetailsScreen(pokemon: pokemon)
           ),
         );
       },

@@ -1,5 +1,7 @@
-class FlavorTextHelper {
-  static String extract(Map<String, dynamic> data, {
+import 'package:intl/intl.dart';
+
+class FormatTextHelper {
+  static String formatFlavorText(Map<String, dynamic> data, {
     String collection = 'flavor_texts',
     String key = 'flavor_text'
   }) {
@@ -12,5 +14,9 @@ class FlavorTextHelper {
     }
 
     return '';
+  }
+  
+  static String formatName(String name) {
+    return toBeginningOfSentenceCase(name.replaceAll('-', ' '));
   }
 }

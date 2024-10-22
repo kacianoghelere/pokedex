@@ -44,6 +44,7 @@ dependencies:
   cached_network_image: ^3.4.1
   expandable_page_view: ^1.0.17
   smooth_page_indicator: ^1.2.0+3
+  percent_indicator: ^4.2.3
 
 dev_dependencies:
   flutter_test:

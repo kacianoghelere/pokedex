@@ -13,6 +13,8 @@ class PokemonMovesTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = Theme.of(context).textTheme.bodyMedium!;
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,13 +27,16 @@ class PokemonMovesTab extends StatelessWidget {
             ),
             title: Text(
               item.name,
-              style: const TextStyle(fontWeight: FontWeight.bold)
+              style: textStyle.copyWith(fontWeight: FontWeight.bold)
             ),
             subtitle: Text(
               item.flavorText,
-              style: const TextStyle(fontStyle: FontStyle.italic)
+              style: textStyle.copyWith(fontStyle: FontStyle.italic)
             ),
-            trailing: Text(item.level.toString()),
+            trailing: Text(
+              item.level.toString(),
+              style: textStyle,
+            ),
           );
         }).toList(),
       ),

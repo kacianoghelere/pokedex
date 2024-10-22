@@ -1,4 +1,4 @@
-import 'package:pokedex/utils/helpers/flavor_text_helper.dart';
+import 'package:pokedex/utils/helpers/format_text_helper.dart';
 
 class PokemonAbility {
   final String name;
@@ -15,9 +15,9 @@ class PokemonAbility {
     final ability = json['ability'];
 
     return PokemonAbility (
-      name: ability['name'],
-      flavorText: FlavorTextHelper.extract(ability),
-      effect: FlavorTextHelper.extract(
+      name: FormatTextHelper.formatName(ability['name']),
+      flavorText: FormatTextHelper.formatFlavorText(ability),
+      effect: FormatTextHelper.formatFlavorText(
         ability,
         collection: 'effects',
         key: 'effect'
