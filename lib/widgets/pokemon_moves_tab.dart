@@ -18,7 +18,7 @@ class PokemonMovesTab extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: pokemon.moves.map((item) {
+        children: pokemon.sortedMoves.map((item) {
           return ListTile(
             leading: PokemonTypeImage(
               PokemonTypeEnum.parse(item.type.name),

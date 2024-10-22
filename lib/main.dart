@@ -69,11 +69,11 @@ class _MyAppState extends State<MyApp> {
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: color),
         primaryColor: darkColor.toMaterialColor(),
-        scaffoldBackgroundColor: const Color.fromRGBO(10, 10, 10, 1),
+        scaffoldBackgroundColor: Colors.black,
         listTileTheme: const ListTileThemeData(
           titleTextStyle: TextStyle(color: Colors.white),
           subtitleTextStyle: TextStyle(color: Colors.white70),
-        )
+        ),
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(

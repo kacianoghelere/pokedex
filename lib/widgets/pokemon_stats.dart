@@ -4,6 +4,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/models/pokemon_stat.dart';
 import 'package:pokedex/providers/theme_provider.dart';
+import 'package:pokedex/utils/extensions/color_extension.dart';
 import 'package:pokedex/widgets/section_title.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,9 @@ class PokemonStats extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkTheme = Provider.of<ThemeProvider>(context).mode == ThemeMode.dark;
+    final ThemeMode themeMode = Provider.of<ThemeProvider>(context).mode;
+
+    bool isDarkTheme = themeMode == ThemeMode.dark;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -31,20 +34,32 @@ class PokemonStats extends StatelessWidget {
             return ListTile(
               title: Text(toBeginningOfSentenceCase(stat.name)),
               titleTextStyle: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.bold
+                fontWeight: FontWeight.w900
               ),
               trailing: SizedBox(
                 width: MediaQuery.of(context).size.width * 0.4,
                 child: LinearPercentIndicator(
                   barRadius: const Radius.circular(16),
-                  backgroundColor: isDarkTheme ? Colors.white12 : Colors.black12,
+                  backgroundColor: isDarkTheme
+                    ? const Color.fromRGBO(15, 15, 15, 1)
+                    : const Color.fromRGBO(245, 245, 245, 1),
                   center: Text(
                     stat.value.toString(),
-                    style: const TextStyle(fontWeight: FontWeight.bold)
+                    style: TextStyle(
+                      color: isDarkTheme ? Colors.white : Colors.black,
+                      fontWeight: FontWeight.bold,
+                      shadows: isDarkTheme ? const [
+                        Shadow(
+                          blurRadius: 1,
+                          color: Colors.black87,
+                          offset: Offset(1.0, 1.0),
+                        )
+                      ] : null
+                    ),
                   ),
                   lineHeight: 20.0,
                   percent: _getStatValue(stat),
-                  progressColor: pokemon.typeColor,
+                  progressColor: pokemon.typeColor.getColorByThemeMode(themeMode),
                 ),
               ),
             );
@@ -55,6 +70,6 @@ class PokemonStats extends StatelessWidget {
   }
 
   double _getStatValue(PokemonStat stat) {
-    return stat.value / 200;
+    return stat.value / 150;
   }
 }

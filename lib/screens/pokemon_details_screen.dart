@@ -26,6 +26,10 @@ class PokemonDetailsScreen extends StatelessWidget {
 
     final typeColor = pokemon.typeColor;
 
+    final tabsColor = isDarkTheme
+      ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.6).toColor()
+      : HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor();
+
     return DefaultTabController(
       length: 3,
       child: Scaffold(
@@ -36,12 +40,15 @@ class PokemonDetailsScreen extends StatelessWidget {
               floating: false,
               pinned: true,
               backgroundColor: typeColor,
+              iconTheme: const IconThemeData(
+                color: Colors.white,
+              ),
               actions: [
                 IconButton(
                   iconSize: 20,
                   icon: Icon(
                     pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
-                    color: Colors.white,
+                    // color: Colors.white,
                   ),
                   onPressed: () {
                     Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
@@ -77,26 +84,25 @@ class PokemonDetailsScreen extends StatelessWidget {
                 centerTitle: true,
                 title: Text(
                   toBeginningOfSentenceCase(pokemon.name),
-                  style: Theme.of(context).appBarTheme.titleTextStyle
-                    ?? Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      shadows: [
-                        const Shadow(
-                          blurRadius: 10,
-                          color: Colors.black87,
-                          offset: Offset(2.0, 2.0),
-                        )
-                      ]
-                    )
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    shadows: [
+                      const Shadow(
+                        blurRadius: 10,
+                        color: Colors.black87,
+                        offset: Offset(2.0, 2.0),
+                      )
+                    ]
+                  )
                 ),
               ),
             ),
             SliverPersistentHeader(
               delegate: _SliverTabBarDelegate(
                 TabBar(
-                  labelColor: HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor(),
-                  indicatorColor: HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor(),
+                  labelColor: tabsColor,
+                  indicatorColor: tabsColor,
                   dividerHeight: 0,
                   unselectedLabelStyle: TextStyle(
                     color: Colors.grey.shade600

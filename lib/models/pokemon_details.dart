@@ -56,4 +56,8 @@ class PokemonDetails extends Pokemon {
       evolutionChain: PokemonEvolutionChain.fromJson(json['species']['evolution_chain'])
     );
   }
+
+  List<PokemonMove> get sortedMoves {
+    return moves..sort((a, b) => a.level.compareTo(b.level));
+  }
 }

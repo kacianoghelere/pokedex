@@ -21,4 +21,20 @@ extension ColorExtension on Color {
 
     return MaterialColor(value, shades);
   }
+
+  Color get darkVariant {
+    return HSLColor.fromColor(this).withLightness(0.4).toColor();
+  }
+
+  Color get lightVariant {
+    return HSLColor.fromColor(this).withLightness(0.7).toColor();
+  }
+
+  Color getColorByThemeMode(ThemeMode themeMode) {
+    return switch(themeMode) {
+      ThemeMode.dark => darkVariant,
+      ThemeMode.light => lightVariant,
+      _ => lightVariant
+    };
+  }
 }
