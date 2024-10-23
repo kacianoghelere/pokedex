@@ -44,9 +44,9 @@ class _MyAppState extends State<MyApp> {
   initState() {
     super.initState();
 
-    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
-
-    filterProvider.fetchFilterData();
+    Provider.of<FilterProvider>(context, listen: false).fetchFilterData();
+    
+    Provider.of<ThemeProvider>(context, listen: false).loadTheme();
   }
 
   @override

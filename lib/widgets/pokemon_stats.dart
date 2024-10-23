@@ -37,7 +37,7 @@ class PokemonStats extends StatelessWidget {
                 fontWeight: FontWeight.w900
               ),
               trailing: SizedBox(
-                width: MediaQuery.of(context).size.width * 0.4,
+                width: MediaQuery.sizeOf(context).width * 0.4,
                 child: LinearPercentIndicator(
                   barRadius: const Radius.circular(16),
                   backgroundColor: isDarkTheme
@@ -48,13 +48,15 @@ class PokemonStats extends StatelessWidget {
                     style: TextStyle(
                       color: isDarkTheme ? Colors.white : Colors.black,
                       fontWeight: FontWeight.bold,
-                      shadows: isDarkTheme ? const [
-                        Shadow(
-                          blurRadius: 1,
-                          color: Colors.black87,
-                          offset: Offset(1.0, 1.0),
-                        )
-                      ] : null
+                      shadows: isDarkTheme
+                        ? const [
+                          Shadow(
+                            blurRadius: 1,
+                            color: Colors.black87,
+                            offset: Offset(1.0, 1.0),
+                          )
+                        ]
+                        : null
                     ),
                   ),
                   lineHeight: 20.0,

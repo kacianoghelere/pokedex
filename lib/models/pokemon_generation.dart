@@ -7,14 +7,14 @@ String _parseGenerationName(String name) {
   return '${toBeginningOfSentenceCase(splittedName.first)} ${splittedName.last.toUpperCase()}';
 }
 
-class Generation extends FilterData {
-  Generation({
+class PokemonGeneration extends FilterData {
+  PokemonGeneration({
     required super.id,
     required String name
   }):
     super(name: _parseGenerationName(name));
 
-  Generation.fromJson(Map<String, dynamic> json):
+  PokemonGeneration.fromJson(Map<String, dynamic> json):
     this(
       id: json['id'],
       name: json['name']

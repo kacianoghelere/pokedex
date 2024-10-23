@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/widgets/generation_filter.dart';
+import 'package:pokedex/widgets/pokemon_generations_filter.dart';
 import 'package:pokedex/widgets/pokemon_types_filter.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,7 @@ class Filters extends StatelessWidget {
               style: Theme.of(context).textTheme.titleLarge
             ),
             const SizedBox(height: 16),
-            const GenerationFilter(),
+            const PokemonGenerationsFilter(),
             const SizedBox(height: 16),
             const PokemonTypesFilter(),
             const SizedBox(height: 16),

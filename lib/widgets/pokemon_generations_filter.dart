@@ -1,19 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:pokedex/models/generation.dart';
+import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:provider/provider.dart';
 
-class GenerationFilter extends StatefulWidget {
-  const GenerationFilter({super.key});
+class PokemonGenerationsFilter extends StatefulWidget {
+  const PokemonGenerationsFilter({super.key});
 
   @override
-  State<GenerationFilter> createState() => _GenerationFilterState();
+  State<PokemonGenerationsFilter> createState() => _PokemonGenerationsFilterState();
 }
 
-class _GenerationFilterState extends State<GenerationFilter> {
-  List<DropdownItem<Generation>> _getDropdownItems() {
+class _PokemonGenerationsFilterState extends State<PokemonGenerationsFilter> {
+  List<DropdownItem<PokemonGeneration>> _getDropdownItems() {
     var generations = Provider.of<FilterProvider>(context).generations;
 
     return generations.map((generation) {
@@ -40,7 +40,7 @@ class _GenerationFilterState extends State<GenerationFilter> {
         ),
         Consumer<FilterProvider>(
           builder: (context, filterProvider, _) {
-            return MultiDropdown<Generation>(
+            return MultiDropdown<PokemonGeneration>(
               items: _getDropdownItems(),
               controller: filterProvider.generationsController,
               enabled: true,

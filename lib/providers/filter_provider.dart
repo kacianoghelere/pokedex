@@ -1,53 +1,49 @@
 import 'package:flutter/foundation.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
-import 'package:pokedex/models/generation.dart';
+import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
 
 class FilterProvider with ChangeNotifier {
   bool _showFavoritesOnly = false;
-  List<Generation> _generations = [];
+  List<PokemonGeneration> _generations = [];
   List<PokemonType> _types = [];
   List<PokemonType> _selectedTypes = [];
-  List<Generation> _selectedGenerations = [];
-  final generationsController = MultiSelectController<Generation>();
+  List<PokemonGeneration> _selectedGenerations = [];
+  final generationsController = MultiSelectController<PokemonGeneration>();
   final pokemonTypesController = MultiSelectController<PokemonType>();
 
-  List<Generation> get generations => _generations;
+  List<PokemonGeneration> get generations => _generations;
 
   List<PokemonType> get types => _types;
 
-  List<Generation> get selectedGenerations => _selectedGenerations;
+  List<PokemonGeneration> get selectedGenerations => _selectedGenerations;
 
   List<PokemonType> get selectedTypes => _selectedTypes;
 
   bool get showFavoritesOnly => _showFavoritesOnly;
 
   Future<void> fetchFilterData() async {
-    final result = await PokemonService.fetchFilters();
+    final (result, exception) = await PokemonService.fetchFilters();
 
-    if (result.hasException) {
-      print("ERROR ${result.exception}");
+    if (exception != null) {
+      debugPrint("ERROR fetchFilterData ${exception.toString()}");
 
       return;
     }
 
-    _types = (result.data?['pokemon_v2_type'] as List)
-      .map((data) => PokemonType.fromJson(data))
-      .toList();
+    if (result != null) {
+      var (generations, types) = result;
 
-    if (kDebugMode) {
-      debugPrint(_types.map((type) => type.type).toList().toString());
+      _types = types;
+
+      _generations = generations;
     }
-
-    _generations = (result.data?['pokemon_v2_generation'] as List)
-      .map((data) => Generation.fromJson(data))
-      .toList();
 
     notifyListeners();
   }
 
-  void setGenerationIds(List<Generation> generations) {
+  void setGenerationIds(List<PokemonGeneration> generations) {
     _selectedGenerations = generations;
 
     notifyListeners();

@@ -1,14 +1,14 @@
 class FailureResult<T extends Exception> {
   final StackTrace stackTrace;
-  final T e;
+  final T error;
 
   FailureResult({
-    required this.e,
+    required this.error,
     required this.stackTrace,
   });
 
   @override
   String toString() {
-    return '${e.toString()}\n$stackTrace';
+    return '${error.toString()}\n$stackTrace';
   }
 }

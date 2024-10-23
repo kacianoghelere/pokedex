@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
-import 'package:pokedex/models/generation.dart';
+import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
@@ -14,7 +14,7 @@ class PokemonProvider with ChangeNotifier {
   List<Pokemon> get favorites => _favoritesBox.values.toList();
 
   Future<void> fetchPokemons({
-    required List<Generation> generations,
+    required List<PokemonGeneration> generations,
     required List<PokemonType> pokemonTypes
   }) async {
     final Map<String, dynamic> where = {};
@@ -35,23 +35,17 @@ class PokemonProvider with ChangeNotifier {
       };
     }
 
-    if (kDebugMode) {
-      debugPrint("fetchPokemons params ${where.toString()}");
-    }
+    final (result, exception) = await PokemonService.fetchList(where);
 
-    final result = await PokemonService.fetchList(where);
-
-    if (result.hasException) {
+    if (exception != null) {
       if (kDebugMode) {
-        debugPrint("fetchPokemons ${result.exception}");
+        debugPrint("fetchPokemons ${exception.toString()}");
       }
 
       return;
     }
 
-    _pokemons = (result.data?['pokemon'] as List)
-      .map((data) => Pokemon.fromJson(data))
-      .toList();
+    _pokemons = result ?? [];
 
     notifyListeners();
   }

@@ -12,7 +12,7 @@ class SectionTitle extends StatelessWidget {
     bool isDarkTheme = Provider.of<ThemeProvider>(context).mode == ThemeMode.dark;
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width,
+      width: MediaQuery.sizeOf(context).width,
       child: ColoredBox(
         color: isDarkTheme
           ? const Color.fromRGBO(10, 10, 10, 1)

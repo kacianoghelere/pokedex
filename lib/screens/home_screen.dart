@@ -55,8 +55,16 @@ class _HomeScreenState extends State<HomeScreen> {
           ThemeToggleButton(),
         ],
       ),
-      body: const SafeArea(
-        child: PokemonList()
+      body: SafeArea(
+        child: Consumer2<FilterProvider, PokemonProvider>(
+          builder: (context, filterProvider, pokemonProvider, _) {
+            final pokemons = filterProvider.showFavoritesOnly
+              ? pokemonProvider.favorites
+              : pokemonProvider.pokemons;
+
+            return PokemonList(pokemons: pokemons);
+          }
+        )
       ),
       floatingActionButton: FloatingActionButton.small(
         backgroundColor: Theme.of(context).primaryColor,
