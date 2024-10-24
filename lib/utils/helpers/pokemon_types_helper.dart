@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/utils/enums/pokemon_type.dart';
 
 class PokemonTypesHelper {
   static String getTypeBackground(String type) {
     return "assets/images/pokemon_types/backgrounds/$type.jpg";
+  }
+
+  static String getTypeIcon(String type) {
+    return "assets/images/pokemon_types/icons/$type.png";
+  }
+
+  static void precacheTypeImages(BuildContext context) {
+    for (var type in PokemonTypeEnum.values) {
+      precacheImage(AssetImage(getTypeBackground(type.name)), context);
+
+      precacheImage(AssetImage(getTypeIcon(type.name)), context);
+    }
   }
 
   static Color getTypeColor(String type) {

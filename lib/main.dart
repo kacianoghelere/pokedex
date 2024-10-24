@@ -7,6 +7,7 @@ import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/screens/home_screen.dart';
 import 'package:pokedex/utils/extensions/color_extension.dart';
+import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -84,6 +85,11 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: color.toMaterialColor(),
         scaffoldBackgroundColor: Colors.white,
       ),
+      builder: (context, widget) {
+        PokemonTypesHelper.precacheTypeImages(context);
+
+        return widget ?? const SizedBox.shrink();
+      },
       home: const HomeScreen(),
     );
   }
