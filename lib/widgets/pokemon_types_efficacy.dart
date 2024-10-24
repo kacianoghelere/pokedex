@@ -18,7 +18,9 @@ class PokemonTypesEfficacy extends StatelessWidget {
       itemCount: effectivenessData.length,
       itemBuilder: (context, index) {
         final entry = effectivenessData[index];
-        final typeName = entry['pokemon_v2_type']['name'];
+
+        final typeName = entry['type']['name'];
+
         final damageFactor = entry['damage_factor'];
 
         var (IconData? iconData, Color backgroundColor) = switch(damageFactor) {

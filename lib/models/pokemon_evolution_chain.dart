@@ -6,13 +6,10 @@ class PokemonEvolutionChain {
   PokemonEvolutionChain({required this.stages});
 
   factory PokemonEvolutionChain.fromJson(Map<String, dynamic> json) {
-    List<Pokemon> stages = [];
-
-    for (var speciesInfo in (json['species'] as List)) {
-      for (var pokemon in (speciesInfo['pokemons'] as List)) {
-        stages.add(Pokemon.fromJson(pokemon));
-      }
-    }
+    final stages = (json['species'] as List? ?? [])
+      .expand((speciesInfo) => speciesInfo['pokemons'] as List? ?? [])
+      .map((pokemon) => Pokemon.fromJson(pokemon))
+      .toList();
 
     return PokemonEvolutionChain(stages: stages);
   }

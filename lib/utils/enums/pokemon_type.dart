@@ -49,7 +49,7 @@ enum PokemonTypeEnum {
   }
 }
 
-extension PokemonTypeExtension on PokemonTypeEnum {
+extension PokemonTypeEnumExtension on PokemonTypeEnum {
   String get name {
     return switch (this) {
       PokemonTypeEnum.bug => 'bug',

@@ -32,13 +32,11 @@ class PokemonDetailsScreen extends StatelessWidget {
       child: Scaffold(
         body: Consumer<ThemeProvider>(
           builder: (context, themeProvider, _) {
-            bool isDarkTheme = themeProvider.mode == ThemeMode.dark;
-
-            final tabsColor = isDarkTheme
+            final tabsColor = themeProvider.isDarkMode
               ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.6).toColor()
               : HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor();
 
-            final headerColor = isDarkTheme
+            final headerColor = themeProvider.isDarkMode
               ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.25).toColor()
               : pokemon.typeColor;
 
@@ -69,7 +67,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                           child: Opacity(
                             opacity: 0.8,
                             child: Image.asset(
-                              PokemonTypesHelper.getTypeBackground(pokemon.types[0]),
+                              PokemonTypesHelper.getTypeBackground(pokemon.types[0].type),
                               width: MediaQuery.sizeOf(context).width,
                               height: 350,
                               fit: BoxFit.cover,
@@ -129,13 +127,14 @@ class PokemonDetailsScreen extends StatelessWidget {
                   }
 
                   if (snapshot.hasError || snapshot.data == null) {
-                    return _renderFetchError();
+                    return _renderErrorAlert();
                   }
 
                   var (pokemonDetails, exception) = snapshot.data!;
 
                   if (exception != null || pokemonDetails == null) {
-                    return _renderFetchError();
+
+                    return _renderErrorAlert();
                   }
 
                   return ColoredBox(
@@ -157,7 +156,7 @@ class PokemonDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _renderFetchError() {
+  Widget _renderErrorAlert() {
     return const _BackgroundBox(
       child: Text('Error while loading pokemon data')
     );

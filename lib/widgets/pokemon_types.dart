@@ -13,7 +13,9 @@ class PokemonTypes extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: Wrap(
         spacing: 4.0,
-        children: pokemon.types.map((type) => PokemonTypeBadge(type: type)).toList()
+        children: pokemon.types.map((pokemonType) {
+          return PokemonTypeBadge(type: pokemonType.type);
+        }).toList()
       ),
     );
   }

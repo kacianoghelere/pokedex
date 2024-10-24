@@ -33,8 +33,8 @@ class PokemonService {
       }
 
       return (result, null);
-    } on Exception catch (exception) {
-      return (null, exception);
+    } on Exception catch (error) {
+      return (null, error);
     }
   }
 
@@ -68,19 +68,19 @@ class PokemonService {
       return (null, exception);
     }
 
-    if (result?.data?['pokemon_v2_type'] == null) {
+    if (result?.data?['types'] == null) {
       return (null, Exception('Empty pokemon type filters'));
     }
 
-    if (result?.data?['pokemon_v2_generation'] == null) {
+    if (result?.data?['generations'] == null) {
       return (null, Exception('Empty pokemon generation filters'));
     }
 
-    var types = (result?.data?['pokemon_v2_type'] as List)
-      .map((data) => PokemonType.fromJson(data))
+    List<PokemonType> types = (result?.data?['types'] as List)
+      .map((data) => PokemonType.asFilter(data))
       .toList();
 
-    var generations = (result?.data?['pokemon_v2_generation'] as List)
+    List<PokemonGeneration> generations = (result?.data?['generations'] as List)
       .map((data) => PokemonGeneration.fromJson(data))
       .toList();
 

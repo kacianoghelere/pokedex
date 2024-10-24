@@ -1,17 +1,10 @@
 const String fetchFiltersDataQuery = r'''
 query GetFiltersData {
-  pokemon_v2_type {
+  types: pokemon_v2_type {
     id
     name
-    pokemonV2TypeefficaciesByTargetTypeId {
-      damage_factor
-      pokemon_v2_type {
-        id
-        name
-      }
-    }
   }
-  pokemon_v2_generation {
+  generations: pokemon_v2_generation {
     id
     name
   }
@@ -25,6 +18,7 @@ query GetPokemons($where: pokemon_v2_pokemon_bool_exp) {
     name
     types: pokemon_v2_pokemontypes {
       type: pokemon_v2_type {
+        id
         name
       }
     }
@@ -45,10 +39,11 @@ query GetPokemonDetails($id: Int!) {
     base_experience
     types: pokemon_v2_pokemontypes {
       type: pokemon_v2_type {
+        id
         name
-        pokemonV2TypeefficaciesByTargetTypeId {
+        effectiveness: pokemonV2TypeefficaciesByTargetTypeId {
           damage_factor
-          pokemon_v2_type {
+          target_type: pokemon_v2_type {
             id
             name
           }
@@ -110,6 +105,7 @@ query GetPokemonDetails($id: Int!) {
             name
             types: pokemon_v2_pokemontypes {
               type: pokemon_v2_type {
+                id
                 name
               }
             }
@@ -117,13 +113,8 @@ query GetPokemonDetails($id: Int!) {
               front_default: sprites(path: "other.official-artwork.front_default")
             }
           }
-          evolutions: pokemon_v2_pokemonevolutions {
-            min_affection
-            min_happiness
+          requirements: pokemon_v2_pokemonevolutions {
             min_level
-            evolved_species: pokemon_v2_pokemonspecy {
-              name
-            }
           }
         }
       }

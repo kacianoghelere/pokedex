@@ -14,11 +14,12 @@ class PokemonGeneration extends FilterData {
   }):
     super(name: _parseGenerationName(name));
 
-  PokemonGeneration.fromJson(Map<String, dynamic> json):
-    this(
+  factory PokemonGeneration.fromJson(Map<String, dynamic> json) {
+    return PokemonGeneration(
       id: json['id'],
       name: json['name']
     );
+  }
 
   @override
   String toString() {

@@ -19,7 +19,7 @@ class PokemonAdapter extends TypeAdapter<Pokemon> {
     return Pokemon(
       id: fields[0] as int,
       name: fields[1] as String,
-      types: (fields[2] as List).cast<String>(),
+      types: (fields[2] as List).cast<PokemonType>(),
       sprite: fields[3] as String,
       isFavorite: fields[4] as bool,
     );

@@ -15,9 +15,9 @@ class PokemonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final typeColor = getTypeColor(pokemon.types.first);
+    final typeColor = getTypeColor(pokemon.types.first.name);
 
-    bool isDarkTheme = Provider.of<ThemeProvider>(context).mode == ThemeMode.dark;
+    bool isDarkTheme = Provider.of<ThemeProvider>(context).isDarkMode;
 
     return GestureDetector(
       onTap: () {
@@ -66,13 +66,13 @@ class PokemonCard extends StatelessWidget {
                             "#${pokemon.id}",
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               fontWeight: FontWeight.bold,
-                              shadows: [
+                              shadows: isDarkTheme ? [
                                 const Shadow(
                                   blurRadius: 1,
                                   color: Colors.black87,
                                   offset: Offset(1.0, 1.0),
                                 )
-                              ]
+                              ] : null
                             ),
                           ),
                         ),
@@ -96,23 +96,23 @@ class PokemonCard extends StatelessWidget {
                                     toBeginningOfSentenceCase(pokemon.name),
                                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                                       fontWeight: FontWeight.bold,
-                                      shadows: [
+                                      shadows: isDarkTheme ? [
                                         const Shadow(
                                           blurRadius: 1,
                                           color: Colors.black87,
                                           offset: Offset(1.0, 1.0),
                                         )
-                                      ]
+                                      ] : null
                                     ),
                                   ),
                                 ),
                               ],
                             ),
                             Row(
-                              children: pokemon.types.map((type) {
+                              children: pokemon.types.map((pokemonType) {
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 4.0),
-                                  child: PokemonTypeBadge(type: type),
+                                  child: PokemonTypeBadge(type: pokemonType.type),
                                 );
                               }).toList(),
                             ),
