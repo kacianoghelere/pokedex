@@ -4,6 +4,7 @@ import 'package:pokedex/widgets/pokemon_abilities.dart';
 import 'package:pokedex/widgets/pokemon_basic_info.dart';
 import 'package:pokedex/widgets/pokemon_stats.dart';
 import 'package:pokedex/widgets/pokemon_types.dart';
+import 'package:pokedex/widgets/pokemon_types_effectiveness.dart';
 
 class PokemonInfoTab extends StatelessWidget {
   final PokemonDetails pokemon;
@@ -29,6 +30,8 @@ class PokemonInfoTab extends StatelessWidget {
             ),
             PokemonTypes(pokemon: pokemon),
             PokemonBasicInfo(pokemon: pokemon),
+            const SizedBox(height: 16),
+            PokemonTypesEffectiveness(pokemon: pokemon),
             const SizedBox(height: 16),
             PokemonStats(pokemon: pokemon),
             const SizedBox(height: 16),

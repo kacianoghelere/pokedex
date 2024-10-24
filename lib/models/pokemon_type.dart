@@ -3,16 +3,14 @@ import 'package:pokedex/models/filter_data.dart';
 import 'package:pokedex/utils/enums/pokemon_type.dart';
 import 'package:pokedex/utils/enums/pokemon_type_effectiveness.dart';
 
-typedef PokemonTypeEffectiveness = Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum>;
-
 class PokemonType extends FilterData {
   final String type;
-  final PokemonTypeEffectiveness effectiveness;
+  final Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum> effectiveness;
 
   PokemonType({
     required super.id,
     required String name,
-    PokemonTypeEffectiveness? effectiveness,
+    Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum>? effectiveness,
   }): type = name,
     effectiveness = effectiveness ?? {},
     super(name: toBeginningOfSentenceCase(name));
@@ -35,7 +33,7 @@ class PokemonType extends FilterData {
     );
   }
 
-  static PokemonTypeEffectiveness _parseEffectiveness(List? data) {
+  static Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum> _parseEffectiveness(List? data) {
     if (data == null) return {};
 
     return {

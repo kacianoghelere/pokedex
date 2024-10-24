@@ -106,7 +106,10 @@ class PokemonDetailsScreen extends StatelessWidget {
                 SliverPersistentHeader(
                   delegate: _SliverTabBarDelegate(
                     TabBar(
-                      dividerHeight: 0,
+                      dividerHeight: 1,
+                      dividerColor: themeProvider.isDarkMode
+                        ? Colors.grey.shade600
+                        : Colors.grey.shade200,
                       indicatorColor: tabsColor,
                       indicator: ShapeDecoration(
                         shape: const CircleBorder(),
@@ -118,6 +121,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                       ),
                       indicatorPadding: EdgeInsets.zero,
                       indicatorSize: TabBarIndicatorSize.tab,
+                      indicatorWeight: 3.0,
                       labelColor: tabsColor,
                       labelStyle: const TextStyle(
                         fontWeight: FontWeight.bold,
@@ -216,11 +220,13 @@ class _SliverTabBarDelegate extends SliverPersistentHeaderDelegate {
     );
   }
 
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
+  double get preferredSize => tabBar.preferredSize.height;
 
   @override
-  double get minExtent => tabBar.preferredSize.height;
+  double get maxExtent => preferredSize;
+
+  @override
+  double get minExtent => preferredSize;
 
   @override
   bool shouldRebuild(_SliverTabBarDelegate oldDelegate) {

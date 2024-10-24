@@ -4,6 +4,7 @@ import 'package:pokedex/models/pokemon_evolution_chain.dart';
 import 'package:pokedex/models/pokemon_move.dart';
 import 'package:pokedex/models/pokemon_stat.dart';
 import 'package:pokedex/models/pokemon_type.dart';
+import 'package:pokedex/models/pokemon_type_effectiveness.dart';
 import 'package:pokedex/utils/enums/pokemon_type.dart';
 import 'package:pokedex/utils/enums/pokemon_type_effectiveness.dart';
 import 'package:pokedex/utils/helpers/format_text_helper.dart';
@@ -17,7 +18,7 @@ class PokemonDetails extends Pokemon {
   final List<PokemonAbility> abilities;
   final List<PokemonStat> stats;
   final PokemonEvolutionChain evolutionChain;
-  final Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum> effectiveness;
+  final List<PokemonTypeEffectiveness> effectiveness;
 
   PokemonDetails({
     required super.id,
@@ -75,7 +76,7 @@ class PokemonDetails extends Pokemon {
     return moves..sort((a, b) => a.level.compareTo(b.level));
   }
 
-  static Map<PokemonTypeEnum, PokemonTypeEffectivenessEnum> _calculateTotalEffectiveness(
+  static List<PokemonTypeEffectiveness> _calculateTotalEffectiveness(
     List<PokemonType> types
   ) {
     final Map<PokemonTypeEnum, int> effectivenessScores = {};
@@ -90,10 +91,16 @@ class PokemonDetails extends Pokemon {
       }
     }
 
-    return effectivenessScores.map((type, score) => MapEntry(
-      type,
-      PokemonTypeEffectivenessEnum.parse(score),
-    ));
+    final List<PokemonTypeEffectiveness> result = [];
+
+    for (var entry in effectivenessScores.entries) {
+      result.add(PokemonTypeEffectiveness(
+        type: entry.key,
+        effectiveness: PokemonTypeEffectivenessEnum.parse(entry.value)
+      ));
+    }
+
+    return result;
   }
 
   @override
