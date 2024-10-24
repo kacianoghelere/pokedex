@@ -14,6 +14,7 @@ class SectionTitle extends StatelessWidget {
         child: Text(
           title,
           style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            fontFamily: 'Poppins',
             fontWeight: FontWeight.w700
           )
         ),

@@ -22,7 +22,7 @@ class PokemonSprite extends StatelessWidget {
     return Stack(
       children: [
         Opacity(
-          opacity: 0.35,
+          opacity: 0.5,
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn),
             child: Image.asset(

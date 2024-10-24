@@ -67,7 +67,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                           child: Opacity(
                             opacity: 0.8,
                             child: Image.asset(
-                              PokemonTypesHelper.getTypeBackground(pokemon.types[0].type),
+                              PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
                               width: MediaQuery.sizeOf(context).width,
                               height: 350,
                               fit: BoxFit.cover,
@@ -90,6 +90,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                       toBeginningOfSentenceCase(pokemon.name),
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Colors.white,
+                        fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
                         shadows: [
                           const Shadow(

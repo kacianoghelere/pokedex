@@ -43,7 +43,11 @@ class Pokemon {
     );
   }
 
+  PokemonType get mainType {
+    return types.first;
+  }
+
   Color get typeColor {
-    return getTypeColor(types[0].name);
+    return getTypeColor(mainType.name);
   }
 }
