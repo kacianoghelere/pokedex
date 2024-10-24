@@ -15,22 +15,49 @@ class PokemonSprite extends StatelessWidget {
     required this.size
   }): spriteSize = (size * _spriteScaleFactor);
 
+  double get spritePosition => (size - (spriteSize)) / 2;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         Opacity(
           opacity: 0.35,
-          child: Image.asset(
-            "assets/images/pokeball-background-minimal.png",
-            width: size,
-            height: size,
-            fit: BoxFit.cover,
+          child: ColorFiltered(
+            colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn),
+            child: Image.asset(
+              "assets/images/pokeball-background-minimal.png",
+              width: size,
+              height: size,
+              fit: BoxFit.cover,
+            ),
           ),
         ),
         Positioned(
-          top: (size - (spriteSize)) / 2,
-          left: (size - (spriteSize)) / 2,
+          top: spritePosition + 4,
+          left: spritePosition + 4,
+          child: Opacity(
+            opacity: 0.4,
+            child: ColorFiltered(
+              colorFilter: const ColorFilter.mode(Colors.black, BlendMode.srcIn),
+              child: CachedNetworkImage(
+                imageUrl: pokemon.sprite,
+                height: spriteSize,
+                width: spriteSize,
+                placeholder: (context, url) {
+                  return const SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              ),
+            ),
+          ),
+        ),
+        Positioned(
+          top: spritePosition,
+          left: spritePosition,
           child: CachedNetworkImage(
             imageUrl: pokemon.sprite,
             height: spriteSize,

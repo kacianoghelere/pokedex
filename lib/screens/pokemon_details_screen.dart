@@ -105,11 +105,34 @@ class PokemonDetailsScreen extends StatelessWidget {
                 SliverPersistentHeader(
                   delegate: _SliverTabBarDelegate(
                     TabBar(
-                      labelColor: tabsColor,
-                      indicatorColor: tabsColor,
                       dividerHeight: 0,
+                      indicatorColor: tabsColor,
+                      indicator: ShapeDecoration(
+                        shape: const CircleBorder(),
+                        image: DecorationImage(
+                          image: const AssetImage("assets/images/pokeball-background-minimal.png"),
+                          opacity: 0.2,
+                          colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn)
+                        ),
+                      ),
+                      indicatorPadding: EdgeInsets.zero,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      labelColor: tabsColor,
+                      labelStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 1,
+                            color: Colors.white12,
+                            offset: Offset(0, 0),
+                          )
+                        ]
+                      ),
                       unselectedLabelStyle: TextStyle(
-                        color: Colors.grey.shade600
+                        color: Colors.grey.shade600,
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16
                       ),
                       tabs: tabs,
                     ),
