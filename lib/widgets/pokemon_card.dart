@@ -59,13 +59,20 @@ class PokemonCard extends StatelessWidget {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0,
+                            horizontal: 16.0,
                             vertical: 4.0
                           ),
                           child: Text(
                             "#${pokemon.id}",
                             style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.bold
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                const Shadow(
+                                  blurRadius: 1,
+                                  color: Colors.black87,
+                                  offset: Offset(1.0, 1.0),
+                                )
+                              ]
                             ),
                           ),
                         ),
@@ -73,44 +80,68 @@ class PokemonCard extends StatelessWidget {
                     ),
                   ),
                   Positioned(
-                    top: 0,
+                    top: 4,
                     right: 10,
                     child: Opacity(
-                      opacity: 0.2,
+                      opacity: 0.3,
                       child: Image.asset(
-                        "assets/images/pokeball-background.png",
-                        width: 150,
-                        height: 150,
+                        "assets/images/pokeball-background-minimal.png",
+                        width: 136,
+                        height: 136,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 40, 16, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    padding: const EdgeInsets.fromLTRB(16, 32, 24, 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.end,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Text(
-                                toBeginningOfSentenceCase(pokemon.name),
-                                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                                  fontWeight: FontWeight.bold
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    toBeginningOfSentenceCase(pokemon.name),
+                                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        const Shadow(
+                                          blurRadius: 1,
+                                          color: Colors.black87,
+                                          offset: Offset(1.0, 1.0),
+                                        )
+                                      ]
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
+                            ),
+                            Row(
+                              children: pokemon.types.map((type) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 4.0),
+                                  child: PokemonTypeBadge(type: type),
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),
-                        Row(
-                          children: pokemon.types.map((type) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 4.0),
-                              child: PokemonTypeBadge(type: type),
+                        CachedNetworkImage(
+                          placeholder: (context, url) {
+                            return const SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(),
                             );
-                          }).toList(),
+                          },
+                          imageUrl: pokemon.sprite,
+                          width: 96,
+                          height: 96
                         ),
                       ],
                     )
@@ -118,22 +149,7 @@ class PokemonCard extends StatelessWidget {
                 ]
               ),
             ),
-          ),
-          Positioned(
-            right: 24,
-            child: CachedNetworkImage(
-              placeholder: (context, url) {
-                return const SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircularProgressIndicator(),
-                );
-              },
-              imageUrl: pokemon.sprite,
-              width: 128,
-              height: 128
-            ),
-          ),
+          )
         ]
       ),
     );

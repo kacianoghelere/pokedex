@@ -28,5 +28,5 @@ class PokemonTypeImage extends Image {
     super.filterQuality,
     super.cacheWidth,
     super.cacheHeight
-  }): super.asset('assets/images/pokemon_types/${type.name}_icon.png');
+  }): super.asset('assets/images/pokemon_types/icons/${type.name}.png');
 }

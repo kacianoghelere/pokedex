@@ -9,6 +9,9 @@ class PokemonEvolutionsTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PokemonList(pokemons: pokemon.evolutionChain.stages);
+    return PokemonList(
+      pokemons: pokemon.evolutionChain.stages,
+      shrinkWrap: true,
+    );
   }
 }
