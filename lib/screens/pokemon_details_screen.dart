@@ -47,6 +47,14 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
   }
 
   @override
+  void dispose() {
+    // Dispose of the animation controller when the widget is disposed
+    _controller.dispose();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = [
       const Tab(text: 'Info'),
@@ -95,7 +103,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
                       children: [
                         Positioned(
                           child: Opacity(
-                            opacity: 0.75,
+                            opacity: 0.9,
                             child: Image.asset(
                               PokemonTypesHelper.getTypeBackground(widget.pokemon.types[0]),
                               width: MediaQuery.sizeOf(context).width,
