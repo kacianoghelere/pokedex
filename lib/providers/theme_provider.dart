@@ -6,13 +6,16 @@ class ThemeProvider with ChangeNotifier {
 
   ThemeMode mode = ThemeMode.light;
 
+  bool get isDarkMode {
+    return mode == ThemeMode.dark;
+  }
+
   void loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
 
     var themeMode = prefs.getString(sharedPreferencesKey);
 
     if (themeMode != null) {
-      print(themeMode);
       mode = themeMode == 'light' ? ThemeMode.light : ThemeMode.dark;
     } else {
       mode = ThemeMode.light;

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/widgets/filters.dart';
+import 'package:pokedex/providers/theme_provider.dart';
+import 'package:pokedex/utils/helpers/filter_bottomsheets.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 import 'package:pokedex/widgets/show_favorites_button.dart';
 import 'package:pokedex/widgets/toggle_theme_button.dart';
@@ -66,23 +68,56 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         )
       ),
-      floatingActionButton: FloatingActionButton.small(
-        backgroundColor: Theme.of(context).primaryColor,
-        shape: const CircleBorder(),
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            builder: (BuildContext context) {
-              return const Filters();
-            },
-          );
-        },
-        elevation: 9,
-        child: Icon(
-          Icons.filter_list_sharp,
-          color: Theme.of(context).iconTheme.color
+      // floatingActionButton: FloatingActionButton.small(
+      //   backgroundColor: Theme.of(context).primaryColor,
+      //   shape: const CircleBorder(),
+      //   onPressed: () {
+      //     showModalBottomSheet(
+      //       context: context,
+      //       builder: (BuildContext context) {
+      //         return const Filters();
+      //       },
+      //     );
+      //   },
+      //   elevation: 9,
+      //   child: Icon(
+      //     Icons.filter_list_sharp,
+      //     color: Theme.of(context).iconTheme.color
+      //   ),
+      // ),
+      floatingActionButton: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) => SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          overlayColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
+          overlayOpacity: 0.5,
+          children: [
+            SpeedDialChild(
+              child: const Icon(Icons.onetwothree_rounded),
+              label: 'Generations',
+              labelBackgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
+              labelStyle: TextStyle(
+                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
+                shadows: null
+              ),
+              onTap: () {
+                openGenerationFilter(context);
+              }
+            ),
+            SpeedDialChild(
+              child: const Icon(Icons.energy_savings_leaf_sharp),
+              label: 'Types',
+              labelStyle: TextStyle(
+                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
+                shadows: null
+              ),
+              labelBackgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
+              onTap: () {
+                openTypeFilter(context);
+              }
+            ),
+          ],
         ),
-      ),
+      )
     );
   }
 }
