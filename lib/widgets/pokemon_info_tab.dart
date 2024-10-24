@@ -13,25 +13,28 @@ class PokemonInfoTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-            child: Text(
-              pokemon.description,
-              style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                fontStyle: FontStyle.italic
-              )
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+              child: Text(
+                pokemon.description,
+                style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  fontStyle: FontStyle.italic
+                )
+              ),
             ),
-          ),
-          PokemonTypes(pokemon: pokemon),
-          PokemonBasicInfo(pokemon: pokemon),
-          const SizedBox(height: 16),
-          PokemonStats(pokemon: pokemon),
-          const SizedBox(height: 16),
-          PokemonAbilities(pokemon: pokemon)
-        ]
+            PokemonTypes(pokemon: pokemon),
+            PokemonBasicInfo(pokemon: pokemon),
+            const SizedBox(height: 16),
+            PokemonStats(pokemon: pokemon),
+            const SizedBox(height: 16),
+            PokemonAbilities(pokemon: pokemon)
+          ]
+        ),
       )
     );
   }

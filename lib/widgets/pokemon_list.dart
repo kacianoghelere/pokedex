@@ -11,6 +11,7 @@ class PokemonList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
       shrinkWrap: shrinkWrap,
       itemCount: pokemons.length,
       itemBuilder: (context, index) {

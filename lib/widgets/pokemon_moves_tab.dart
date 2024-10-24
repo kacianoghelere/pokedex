@@ -15,31 +15,33 @@ class PokemonMovesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.bodyMedium!;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: pokemon.sortedMoves.map((item) {
-          return ListTile(
-            leading: PokemonTypeImage(
-              PokemonTypeEnum.parse(item.type.name),
-              height: 24,
-              width: 24,
-            ),
-            title: Text(
-              item.name,
-              style: textStyle.copyWith(fontWeight: FontWeight.bold)
-            ),
-            subtitle: Text(
-              item.flavorText,
-              style: textStyle.copyWith(fontStyle: FontStyle.italic)
-            ),
-            trailing: Text(
-              item.level.toString(),
-              style: textStyle,
-            ),
-          );
-        }).toList(),
-      ),
+    // TODO: Add move text filter
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      itemCount: pokemon.sortedMoves.length,
+      itemBuilder: (context, index) {
+        final item = pokemon.sortedMoves[index];
+
+        return ListTile(
+          leading: PokemonTypeImage(
+            PokemonTypeEnum.parse(item.type.name),
+            height: 24,
+            width: 24,
+          ),
+          title: Text(
+            item.name,
+            style: textStyle.copyWith(fontWeight: FontWeight.bold)
+          ),
+          subtitle: Text(
+            item.flavorText,
+            style: textStyle.copyWith(fontStyle: FontStyle.italic)
+          ),
+          trailing: Text(
+            item.level.toString(),
+            style: textStyle,
+          ),
+        );
+      }
     );
   }
 }
