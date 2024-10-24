@@ -72,6 +72,6 @@ class PokemonStats extends StatelessWidget {
   }
 
   double _getStatValue(PokemonStat stat) {
-    return stat.value / 150;
+    return stat.value / 250;
   }
 }

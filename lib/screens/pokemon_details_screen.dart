@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
@@ -9,50 +8,16 @@ import 'package:pokedex/utils/services/pokemon_service.dart';
 import 'package:pokedex/widgets/pokemon_info_tab.dart';
 import 'package:pokedex/widgets/pokemon_evolutions_tab.dart';
 import 'package:pokedex/widgets/pokemon_moves_tab.dart';
+import 'package:pokedex/widgets/pokemon_sprite.dart';
 import 'package:provider/provider.dart';
 
-class PokemonDetailsScreen extends StatefulWidget {
+class PokemonDetailsScreen extends StatelessWidget {
   final Pokemon pokemon;
 
   const PokemonDetailsScreen({
     super.key,
     required this.pokemon
   });
-
-  @override
-  State<PokemonDetailsScreen> createState() => _PokemonDetailsScreenState();
-}
-
-class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
-  with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _animation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 10),
-    );
-
-    _animation = Tween<double>(
-      begin: 0,
-      end: 2 * 3.141,
-    ).animate(_controller);
-
-    // Repeat the animation indefinitely
-    _controller.repeat();
-  }
-
-  @override
-  void dispose() {
-    // Dispose of the animation controller when the widget is disposed
-    _controller.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,12 +35,12 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
             bool isDarkTheme = themeProvider.mode == ThemeMode.dark;
 
             final tabsColor = isDarkTheme
-              ? HSLColor.fromColor(widget.pokemon.typeColor).withLightness(0.6).toColor()
-              : HSLColor.fromColor(widget.pokemon.typeColor).withLightness(0.4).toColor();
+              ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.6).toColor()
+              : HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor();
 
             final headerColor = isDarkTheme
-              ? HSLColor.fromColor(widget.pokemon.typeColor).withLightness(0.25).toColor()
-              : widget.pokemon.typeColor;
+              ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.25).toColor()
+              : pokemon.typeColor;
 
             return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -84,16 +49,15 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
                   floating: false,
                   pinned: true,
                   backgroundColor: headerColor,
-
                   iconTheme: const IconThemeData(color: Colors.white),
                   actions: [
                     IconButton(
                       iconSize: 20,
                       icon: Icon(
-                        widget.pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
+                        pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
                       ),
                       onPressed: () {
-                        Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(widget.pokemon);
+                        Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
                       },
                       padding: EdgeInsets.zero
                     ),
@@ -103,9 +67,9 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
                       children: [
                         Positioned(
                           child: Opacity(
-                            opacity: 0.9,
+                            opacity: 0.8,
                             child: Image.asset(
-                              PokemonTypesHelper.getTypeBackground(widget.pokemon.types[0]),
+                              PokemonTypesHelper.getTypeBackground(pokemon.types[0]),
                               width: MediaQuery.sizeOf(context).width,
                               height: 350,
                               fit: BoxFit.cover,
@@ -115,62 +79,17 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
                         Center(
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 48.0),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  child: AnimatedBuilder(
-                                    animation: _animation,
-                                    builder: (context, child) {
-                                      // Use Transform.rotate to rotate the Image based on the animation value
-                                      return Transform.rotate(
-                                        angle: _animation.value,
-                                        child: Opacity(
-                                          opacity: 0.35,
-                                          child: Image.asset(
-                                            "assets/images/pokeball-background-minimal.png",
-                                            width: 250,
-                                            height: 250,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                  // child: Opacity(
-                                  //   opacity: 0.35,
-                                  //   child: Image.asset(
-                                  //     "assets/images/pokeball-background-minimal.png",
-                                  //     width: 250,
-                                  //     height: 250,
-                                  //     fit: BoxFit.cover,
-                                  //   ),
-                                  // ),
-                                ),
-                                Positioned(
-                                  top: 25,
-                                  left: 25,
-                                  child: CachedNetworkImage(
-                                    imageUrl: widget.pokemon.sprite,
-                                    width: 200,
-                                    height: 200,
-                                    placeholder: (context, url) {
-                                      return const SizedBox(
-                                        height: 30,
-                                        width: 30,
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ]
-                            ),
+                            child: PokemonSprite(
+                              pokemon: pokemon,
+                              size: 250,
+                            )
                           ),
                         )
                       ],
                     ),
                     centerTitle: true,
                     title: Text(
-                      toBeginningOfSentenceCase(widget.pokemon.name),
+                      toBeginningOfSentenceCase(pokemon.name),
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -201,7 +120,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>
                 ),
               ],
               body: FutureBuilder<PokemonDetailsResponse>(
-                future: PokemonService.fetchDetails(widget.pokemon.id),
+                future: PokemonService.fetchDetails(pokemon.id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const _BackgroundBox(

@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/screens/pokemon_details_screen.dart';
 import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:pokedex/widgets/pokemon_sprite.dart';
 import 'package:pokedex/widgets/pokemon_type_badge.dart';
 import 'package:provider/provider.dart';
 
@@ -79,19 +79,6 @@ class PokemonCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Positioned(
-                    top: 4,
-                    right: 10,
-                    child: Opacity(
-                      opacity: 0.3,
-                      child: Image.asset(
-                        "assets/images/pokeball-background-minimal.png",
-                        width: 136,
-                        height: 136,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 32, 24, 16),
                     child: Row(
@@ -131,18 +118,10 @@ class PokemonCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        CachedNetworkImage(
-                          placeholder: (context, url) {
-                            return const SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          imageUrl: pokemon.sprite,
-                          width: 96,
-                          height: 96
-                        ),
+                        PokemonSprite(
+                          size: 100,
+                          pokemon: pokemon,
+                        )
                       ],
                     )
                   )
