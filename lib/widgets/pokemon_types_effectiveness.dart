@@ -16,19 +16,15 @@ class PokemonTypesEffectiveness extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SectionTitle(title: 'Effectiveness'),
-        GridView.builder(
-          padding: const EdgeInsets.all(16),
+        GridView.count(
+          childAspectRatio: 3.5,
+          crossAxisCount: 3,
+          crossAxisSpacing: 0,
+          mainAxisSpacing: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          primary: false,
           shrinkWrap: true,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 3.5,
-            crossAxisCount: 3,
-            crossAxisSpacing: 0,
-            mainAxisSpacing: 0,
-          ),
-          itemCount: pokemon.effectiveness.length,
-          itemBuilder: (context, index) {
-            final entry = pokemon.effectiveness[index];
-
+          children: pokemon.effectiveness.map((entry) {
             var effectivenessInfo = _getEffectivenessInfo(entry.effectiveness);
 
             return Row(
@@ -47,7 +43,7 @@ class PokemonTypesEffectiveness extends StatelessWidget {
                 ),
               ],
             );
-          },
+          }).toList()
         ),
       ],
     );

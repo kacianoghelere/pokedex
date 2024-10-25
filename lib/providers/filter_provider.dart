@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
+import 'package:pokedex/utils/extensions/list_extension.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
 
 class FilterProvider with ChangeNotifier {
@@ -24,6 +25,10 @@ class FilterProvider with ChangeNotifier {
   bool get showFavoritesOnly => _showFavoritesOnly;
 
   Future<void> fetchFilterData() async {
+    _selectedGenerations.clear();
+
+    _selectedTypes.clear();
+
     final (result, exception) = await PokemonService.fetchFilters();
 
     if (exception != null) {
@@ -51,6 +56,18 @@ class FilterProvider with ChangeNotifier {
 
   void setTypes(List<PokemonType> types) {
     _selectedTypes = types;
+
+    notifyListeners();
+  }
+
+  void toggleGenerationSelection(PokemonGeneration generation) {
+    _selectedGenerations.toggleElement(generation);
+
+    notifyListeners();
+  }
+
+  void toggleTypeSelection(PokemonType type) {
+    _selectedTypes.toggleElement(type);
 
     notifyListeners();
   }

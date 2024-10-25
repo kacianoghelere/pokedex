@@ -59,6 +59,18 @@ class _MyAppState extends State<MyApp> {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
 
+    const titleStyle = TextStyle(fontFamily: 'Poppins');
+
+    // TODO: Fix dark theme issue with titles
+    const textThemeData = TextTheme(
+      headlineLarge: titleStyle,
+      headlineMedium: titleStyle,
+      headlineSmall: titleStyle,
+      titleLarge: titleStyle,
+      titleMedium: titleStyle,
+      titleSmall: titleStyle,
+    );
+
     return MaterialApp(
       title: 'Pokédex',
       themeMode: themeProvider.mode,
@@ -66,8 +78,8 @@ class _MyAppState extends State<MyApp> {
         appBarTheme: AppBarTheme(
           backgroundColor: darkColor,
         ),
-        bottomSheetTheme: const BottomSheetThemeData(
-          backgroundColor: Colors.black
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.grey.shade900
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: color),
         primaryColor: darkColor.toMaterialColor(),
@@ -76,10 +88,14 @@ class _MyAppState extends State<MyApp> {
           titleTextStyle: TextStyle(color: Colors.white),
           subtitleTextStyle: TextStyle(color: Colors.white70),
         ),
+        textTheme: textThemeData
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(
           backgroundColor: color
+        ),
+        bottomSheetTheme: BottomSheetThemeData(
+          backgroundColor: Colors.grey.shade100
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: color),
         primaryColor: color,
@@ -88,6 +104,7 @@ class _MyAppState extends State<MyApp> {
         listTileTheme: const ListTileThemeData(
           minTileHeight: 32
         ),
+        textTheme: textThemeData
       ),
       builder: (context, widget) {
         PokemonTypesHelper.precacheTypeImages(context);
