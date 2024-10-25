@@ -45,7 +45,6 @@ dependencies:
   percent_indicator: ^4.2.3
   shared_preferences: ^2.3.2
   flutter_speed_dial: ^7.0.0
-  gif: ^2.3.0
 
 dev_dependencies:
   flutter_test:
@@ -76,8 +75,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/images/pokeball.gif
-    - assets/images/pokeball-background-minimal.png
+    - assets/images/pokeball-background.png
     - assets/images/pokemon_types/backgrounds/bug.jpg
     - assets/images/pokemon_types/backgrounds/dark.jpg
     - assets/images/pokemon_types/backgrounds/dragon.jpg

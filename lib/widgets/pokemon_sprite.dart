@@ -26,7 +26,7 @@ class PokemonSprite extends StatelessWidget {
           child: ColorFiltered(
             colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn),
             child: Image.asset(
-              "assets/images/pokeball-background-minimal.png",
+              "assets/images/pokeball-background.png",
               width: size,
               height: size,
               fit: BoxFit.cover,

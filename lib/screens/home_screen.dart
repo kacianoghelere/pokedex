@@ -3,6 +3,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
+import 'package:pokedex/screens/rotation_benchmark.dart';
 import 'package:pokedex/utils/helpers/filter_bottomsheets.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 import 'package:pokedex/widgets/show_favorites_button.dart';
@@ -13,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -52,10 +53,24 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ]
           ),
-        actions: const [
-          ShowFavoritesButton(),
-          ThemeToggleButton(),
+        actions: [
+          const ShowFavoritesButton(),
+          const ThemeToggleButton(),
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const RotationBenchmark()
+                ),
+              );
+            },
+            icon: const Icon(Icons.rotate_right_sharp)
+          )
         ],
+        actionsIconTheme: const IconThemeData(
+          color: Colors.white
+        ),
       ),
       body: SafeArea(
         child: Consumer2<FilterProvider, PokemonProvider>(
@@ -68,23 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         )
       ),
-      // floatingActionButton: FloatingActionButton.small(
-      //   backgroundColor: Theme.of(context).primaryColor,
-      //   shape: const CircleBorder(),
-      //   onPressed: () {
-      //     showModalBottomSheet(
-      //       context: context,
-      //       builder: (BuildContext context) {
-      //         return const Filters();
-      //       },
-      //     );
-      //   },
-      //   elevation: 9,
-      //   child: Icon(
-      //     Icons.filter_list_sharp,
-      //     color: Theme.of(context).iconTheme.color
-      //   ),
-      // ),
       floatingActionButton: Consumer<ThemeProvider>(
         builder: (context, themeProvider, _) => SpeedDial(
           animatedIcon: AnimatedIcons.menu_close,

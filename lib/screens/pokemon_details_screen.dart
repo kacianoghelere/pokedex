@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gif/gif.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
@@ -9,6 +8,7 @@ import 'package:pokedex/widgets/pokemon_info_tab.dart';
 import 'package:pokedex/widgets/pokemon_evolutions_tab.dart';
 import 'package:pokedex/widgets/pokemon_moves_tab.dart';
 import 'package:pokedex/widgets/pokemon_sprite.dart';
+import 'package:pokedex/widgets/rotating_logo.dart';
 import 'package:pokedex/widgets/toggle_favorite_pokemon_button.dart';
 import 'package:provider/provider.dart';
 
@@ -24,29 +24,7 @@ class PokemonDetailsScreen extends StatefulWidget {
   State<PokemonDetailsScreen> createState() => _PokemonDetailsScreenState();
 }
 
-class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> with TickerProviderStateMixin {
-  late GifController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = GifController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _disposeLoadAnimation();
-  }
-
-  void _disposeLoadAnimation() {
-    if (_controller.isAnimating) {
-     _controller.dispose();
-    }
-  }
-
+class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
   @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = [
@@ -112,7 +90,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> with Ticker
                       indicator: ShapeDecoration(
                         shape: const CircleBorder(),
                         image: DecorationImage(
-                          image: const AssetImage("assets/images/pokeball-background-minimal.png"),
+                          image: const AssetImage("assets/images/pokeball-background.png"),
                           opacity: 0.2,
                           colorFilter: ColorFilter.mode(widget.pokemon.typeColor, BlendMode.srcIn)
                         ),
@@ -147,19 +125,13 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> with Ticker
                 future: PokemonService.fetchDetails(widget.pokemon.id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _BackgroundBox(
-                      child: Gif(
-                        image: const AssetImage("assets/images/pokeball.gif"),
-                        controller: _controller,
-                        fps: 30,
-                        height: 150,
-                        width: 150,
-                        autostart: Autostart.loop,
-                        placeholder: (context) => const Text('Loading...'),
-                        onFetchCompleted: () {
-                           _controller.reset();
-                           _controller.forward();
-                        },
+                    return const _BackgroundBox(
+                      child: Opacity(
+                        opacity: 0.3,
+                        child: RotatingLogo(
+                          duration: Durations.extralong4,
+                          curve: Easing.standard
+                        )
                       )
                     );
                   }
@@ -174,8 +146,6 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> with Ticker
 
                     return _renderErrorAlert();
                   }
-
-                  _disposeLoadAnimation();
 
                   return ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
@@ -236,7 +206,6 @@ class _HeaderBackground extends StatelessWidget {
     );
   }
 }
-
 
 class _BackgroundBox extends StatelessWidget {
   final Widget child;
