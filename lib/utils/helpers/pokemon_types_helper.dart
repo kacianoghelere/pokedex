@@ -17,6 +17,7 @@ class PokemonTypesHelper {
       precacheImage(AssetImage(getTypeIcon(type.name)), context);
     }
 
+    precacheImage(const AssetImage("assets/images/pokeball.gif"), context);
     precacheImage(const AssetImage("assets/images/pokeball-background-minimal.png"), context);
   }
 

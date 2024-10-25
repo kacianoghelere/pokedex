@@ -20,7 +20,7 @@ class PokemonTypesEffectiveness extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           shrinkWrap: true,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 3,
+            childAspectRatio: 3.5,
             crossAxisCount: 3,
             crossAxisSpacing: 0,
             mainAxisSpacing: 0,
@@ -34,6 +34,7 @@ class PokemonTypesEffectiveness extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                Expanded(child: PokemonTypeBadge(type: entry.type.name)),
                 SizedBox(
                   height: 24,
                   width: 24,
@@ -44,8 +45,6 @@ class PokemonTypesEffectiveness extends StatelessWidget {
                     )
                     : null
                 ),
-                PokemonTypeBadge(type: entry.type.name),
-                const SizedBox(height: 8),
               ],
             );
           },

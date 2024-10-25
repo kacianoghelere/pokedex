@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -84,6 +85,9 @@ class _MyAppState extends State<MyApp> {
         primaryColor: color,
         primarySwatch: color.toMaterialColor(),
         scaffoldBackgroundColor: Colors.white,
+        listTileTheme: const ListTileThemeData(
+          minTileHeight: 32
+        ),
       ),
       builder: (context, widget) {
         PokemonTypesHelper.precacheTypeImages(context);

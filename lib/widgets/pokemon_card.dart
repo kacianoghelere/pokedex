@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
@@ -7,7 +6,7 @@ import 'package:pokedex/screens/pokemon_details_screen.dart';
 import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/utils/pokemon_type_colors.dart';
 import 'package:pokedex/widgets/pokemon_sprite.dart';
-import 'package:pokedex/widgets/pokemon_type_badge.dart';
+import 'package:pokedex/widgets/pokemon_types.dart';
 import 'package:provider/provider.dart';
 
 class PokemonCard extends StatelessWidget {
@@ -35,7 +34,6 @@ class PokemonCard extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  // colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.softLight),
                   fit: BoxFit.fitWidth,
                   opacity: 0.15,
                   image: AssetImage(PokemonTypesHelper.getTypeBackground(pokemon.mainType.type))
@@ -54,7 +52,7 @@ class PokemonCard extends StatelessWidget {
                       children: [
                         _getPokemonIdBadge(context),
                         _getPokemonName(context),
-                        _getPokemonTypeBadges()
+                        PokemonTypes(pokemon: pokemon)
                       ],
                     ),
                     PokemonSprite(
@@ -75,7 +73,7 @@ class PokemonCard extends StatelessWidget {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
 
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding: const EdgeInsets.only(bottom: 8.0),
       child: Text(
         toBeginningOfSentenceCase(pokemon.name),
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -104,7 +102,7 @@ class PokemonCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: isDarkMode
             ? hslColor.withLightness(0.2).toColor()
-            : hslColor.withLightness(0.5).toColor(),
+            : hslColor.withLightness(0.45).toColor(),
           borderRadius: BorderRadius.circular(16)
         ),
         child: Padding(
@@ -127,17 +125,6 @@ class PokemonCard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-  
-  Widget _getPokemonTypeBadges() {
-    return Row(
-      children: pokemon.types.map((pokemonType) {
-        return Padding(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: PokemonTypeBadge(type: pokemonType.type),
-        );
-      }).toList(),
     );
   }
 

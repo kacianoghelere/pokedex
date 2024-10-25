@@ -20,7 +20,7 @@ class PokemonInfoTab extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+              padding: const EdgeInsets.all(16),
               child: Text(
                 pokemon.description,
                 style: Theme.of(context).textTheme.bodyLarge!.copyWith(
@@ -28,7 +28,14 @@ class PokemonInfoTab extends StatelessWidget {
                 )
               ),
             ),
-            PokemonTypes(pokemon: pokemon),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  PokemonTypes(pokemon: pokemon),
+                ],
+              ),
+            ),
             PokemonBasicInfo(pokemon: pokemon),
             const SizedBox(height: 16),
             PokemonTypesEffectiveness(pokemon: pokemon),

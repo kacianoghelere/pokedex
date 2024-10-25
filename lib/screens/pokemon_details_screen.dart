@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gif/gif.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
@@ -9,15 +9,43 @@ import 'package:pokedex/widgets/pokemon_info_tab.dart';
 import 'package:pokedex/widgets/pokemon_evolutions_tab.dart';
 import 'package:pokedex/widgets/pokemon_moves_tab.dart';
 import 'package:pokedex/widgets/pokemon_sprite.dart';
+import 'package:pokedex/widgets/toggle_favorite_pokemon_button.dart';
 import 'package:provider/provider.dart';
 
-class PokemonDetailsScreen extends StatelessWidget {
+class PokemonDetailsScreen extends StatefulWidget {
   final Pokemon pokemon;
 
   const PokemonDetailsScreen({
     super.key,
     required this.pokemon
   });
+
+  @override
+  State<PokemonDetailsScreen> createState() => _PokemonDetailsScreenState();
+}
+
+class _PokemonDetailsScreenState extends State<PokemonDetailsScreen> with TickerProviderStateMixin {
+  late GifController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = GifController(vsync: this);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _disposeLoadAnimation();
+  }
+
+  void _disposeLoadAnimation() {
+    if (_controller.isAnimating) {
+     _controller.dispose();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,62 +60,32 @@ class PokemonDetailsScreen extends StatelessWidget {
       child: Scaffold(
         body: Consumer<ThemeProvider>(
           builder: (context, themeProvider, _) {
+            final hslColor = HSLColor.fromColor(widget.pokemon.typeColor);
+
             final tabsColor = themeProvider.isDarkMode
-              ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.6).toColor()
-              : HSLColor.fromColor(pokemon.typeColor).withLightness(0.4).toColor();
+              ? hslColor.withLightness(0.6).toColor()
+              : hslColor.withLightness(0.4).toColor();
 
             final headerColor = themeProvider.isDarkMode
-              ? HSLColor.fromColor(pokemon.typeColor).withLightness(0.25).toColor()
-              : pokemon.typeColor;
+              ? hslColor.withLightness(0.25).toColor()
+              : widget.pokemon.typeColor;
 
             return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
                 SliverAppBar(
+                  backgroundColor: headerColor,
                   expandedHeight: 300.0,
                   floating: false,
-                  pinned: true,
-                  backgroundColor: headerColor,
                   iconTheme: const IconThemeData(color: Colors.white),
+                  pinned: true,
                   actions: [
-                    IconButton(
-                      iconSize: 20,
-                      icon: Icon(
-                        pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
-                      ),
-                      onPressed: () {
-                        Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
-                      },
-                      padding: EdgeInsets.zero
-                    ),
+                    ToggleFavoritePokemonButton(pokemon: widget.pokemon)
                   ],
                   flexibleSpace: FlexibleSpaceBar(
-                    background: Stack(
-                      children: [
-                        Positioned(
-                          child: Opacity(
-                            opacity: 0.8,
-                            child: Image.asset(
-                              PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
-                              width: MediaQuery.sizeOf(context).width,
-                              height: 350,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 48.0),
-                            child: PokemonSprite(
-                              pokemon: pokemon,
-                              size: 250,
-                            )
-                          ),
-                        )
-                      ],
-                    ),
+                    background: _HeaderBackground(pokemon: widget.pokemon),
                     centerTitle: true,
                     title: Text(
-                      toBeginningOfSentenceCase(pokemon.name),
+                      toBeginningOfSentenceCase(widget.pokemon.name),
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
                         color: Colors.white,
                         fontFamily: 'Poppins',
@@ -116,7 +114,7 @@ class PokemonDetailsScreen extends StatelessWidget {
                         image: DecorationImage(
                           image: const AssetImage("assets/images/pokeball-background-minimal.png"),
                           opacity: 0.2,
-                          colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn)
+                          colorFilter: ColorFilter.mode(widget.pokemon.typeColor, BlendMode.srcIn)
                         ),
                       ),
                       indicatorPadding: EdgeInsets.zero,
@@ -146,11 +144,23 @@ class PokemonDetailsScreen extends StatelessWidget {
                 ),
               ],
               body: FutureBuilder<PokemonDetailsResponse>(
-                future: PokemonService.fetchDetails(pokemon.id),
+                future: PokemonService.fetchDetails(widget.pokemon.id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const _BackgroundBox(
-                      child: CircularProgressIndicator()
+                    return _BackgroundBox(
+                      child: Gif(
+                        image: const AssetImage("assets/images/pokeball.gif"),
+                        controller: _controller,
+                        fps: 30,
+                        height: 150,
+                        width: 150,
+                        autostart: Autostart.loop,
+                        placeholder: (context) => const Text('Loading...'),
+                        onFetchCompleted: () {
+                           _controller.reset();
+                           _controller.forward();
+                        },
+                      )
                     );
                   }
 
@@ -164,6 +174,8 @@ class PokemonDetailsScreen extends StatelessWidget {
 
                     return _renderErrorAlert();
                   }
+
+                  _disposeLoadAnimation();
 
                   return ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
@@ -191,6 +203,41 @@ class PokemonDetailsScreen extends StatelessWidget {
   }
 }
 
+class _HeaderBackground extends StatelessWidget {
+  final Pokemon pokemon;
+
+  const _HeaderBackground({required this.pokemon});
+
+  @override
+  Widget build(BuildContext context) {
+        return Stack(
+      children: [
+        Positioned(
+          child: Opacity(
+            opacity: 0.8,
+            child: Image.asset(
+              PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
+              width: MediaQuery.sizeOf(context).width,
+              height: 500,
+              fit: BoxFit.cover,
+            ),
+          ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 48.0),
+            child: PokemonSprite(
+              pokemon: pokemon,
+              size: 250,
+            )
+          ),
+        )
+      ],
+    );
+  }
+}
+
+
 class _BackgroundBox extends StatelessWidget {
   final Widget child;
 
@@ -198,8 +245,10 @@ class _BackgroundBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var hslColor = HSLColor.fromColor(Theme.of(context).scaffoldBackgroundColor);
+
     return ColoredBox(
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: hslColor.withLightness(0.92).toColor(),
       child: Center(
         child: child
       )

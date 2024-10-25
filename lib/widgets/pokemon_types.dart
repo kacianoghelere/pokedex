@@ -9,14 +9,12 @@ class PokemonTypes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Wrap(
-        spacing: 4.0,
-        children: pokemon.types.map((pokemonType) {
-          return PokemonTypeBadge(type: pokemonType.type);
-        }).toList()
-      ),
+    return Wrap(
+      spacing: 4.0,
+      runSpacing: 4.0,
+      children: pokemon.types.map((pokemonType) {
+        return PokemonTypeBadge(type: pokemonType.type);
+      }).toList()
     );
   }
 }
