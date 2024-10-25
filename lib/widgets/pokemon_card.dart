@@ -113,14 +113,15 @@ class PokemonCard extends StatelessWidget {
           child: Text(
             "#${pokemon.id}",
             style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Colors.white,
               fontWeight: FontWeight.bold,
-              shadows: isDarkMode ? [
+              shadows: [
                 const Shadow(
-                  blurRadius: 1,
+                  blurRadius: 5,
                   color: Colors.black87,
                   offset: Offset(1.0, 1.0),
                 )
-              ] : null
+              ]
             ),
           ),
         ),
