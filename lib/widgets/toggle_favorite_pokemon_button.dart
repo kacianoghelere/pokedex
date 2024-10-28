@@ -10,14 +10,18 @@ class ToggleFavoritePokemonButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      iconSize: 20,
-      padding: EdgeInsets.zero,
-      icon: Icon(
-        pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
-      ),
-      onPressed: () {
-        Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
+    return Consumer<PokemonProvider>(
+      builder: (context, pokemonProvider, _) {
+        return IconButton(
+          iconSize: 20,
+          padding: EdgeInsets.zero,
+          icon: Icon(
+            pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
+          ),
+          onPressed: () {
+            Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
+          },
+        );
       },
     );
   }

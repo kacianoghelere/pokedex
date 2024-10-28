@@ -19,10 +19,16 @@ class PokemonAdapter extends TypeAdapter<Pokemon> {
     return Pokemon(
       id: fields[0] as int,
       name: fields[1] as String,
-      types: (fields[2] as List).cast<PokemonType>(),
+      types: _parseTypes((fields[2] as List).cast<String>()),
       sprite: fields[3] as String,
       isFavorite: fields[4] as bool,
     );
+  }
+
+  List<PokemonType> _parseTypes(List<String> data) {
+    return data.map((item) {
+      return PokemonType(id: 0, name: item);
+    }).toList();
   }
 
   @override
@@ -34,7 +40,7 @@ class PokemonAdapter extends TypeAdapter<Pokemon> {
       ..writeByte(1)
       ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.types)
+      ..write(obj.types.map((type) => type.type).toList())
       ..writeByte(3)
       ..write(obj.sprite)
       ..writeByte(4)

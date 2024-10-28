@@ -206,7 +206,7 @@ class _HeaderBackground extends StatelessWidget {
             padding: const EdgeInsets.symmetric(vertical: 48.0),
             child: PokemonSprite(
               pokemon: pokemon,
-              size: 250,
+              size: 240,
             )
           ),
         )
