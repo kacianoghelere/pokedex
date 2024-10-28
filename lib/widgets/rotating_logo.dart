@@ -36,19 +36,9 @@ class _RotatingLogoState extends State<RotatingLogo>
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (ModalRoute.of(context)?.isCurrent ?? false) {
-      _controller.repeat();
-    } else {
-      _controller.stop();
-    }
-  }
-
-  @override
   void dispose() {
     _controller.dispose();
+
     super.dispose();
   }
 

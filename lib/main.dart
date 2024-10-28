@@ -65,7 +65,6 @@ class _MyAppState extends State<MyApp> {
 
     const titleStyle = TextStyle(
       fontFamily: 'Poppins',
-      color: Colors.white,
       fontWeight: FontWeight.bold,
     );
 
@@ -81,6 +80,8 @@ class _MyAppState extends State<MyApp> {
     );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      showPerformanceOverlay: true,
       title: 'Pokédex',
       themeMode: themeProvider.mode,
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(

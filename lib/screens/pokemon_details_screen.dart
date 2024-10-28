@@ -65,6 +65,7 @@ class PokemonDetailsScreen extends StatelessWidget {
             return Text(
               toBeginningOfSentenceCase(pokemon.name),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Colors.white,
                 shadows: [
                   const Shadow(
                     blurRadius: 10,
