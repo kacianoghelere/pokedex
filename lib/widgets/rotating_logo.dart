@@ -25,7 +25,7 @@ class _RotatingLogoState extends State<RotatingLogo>
     super.initState();
 
     _controller = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: widget.duration,
       vsync: this,
     )..repeat();
 
@@ -36,6 +36,17 @@ class _RotatingLogoState extends State<RotatingLogo>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (ModalRoute.of(context)?.isCurrent ?? false) {
+      _controller.repeat();
+    } else {
+      _controller.stop();
+    }
+  }
+
+  @override
   void dispose() {
     _controller.dispose();
     super.dispose();
@@ -43,16 +54,16 @@ class _RotatingLogoState extends State<RotatingLogo>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: RotationTransition(
-          turns: _animation,
+    return TickerMode(
+      enabled: ModalRoute.of(context)?.isCurrent ?? true,
+      child: RotationTransition(
+        turns: _animation,
+        filterQuality: FilterQuality.none,
+        child: Image.asset(
+          'assets/images/pokeball-background.png',
           filterQuality: FilterQuality.none,
-          child: Image.asset(
-            'assets/images/pokeball-background.png',
-            width: 200,
-            height: 200,
-          ),
+          width: 200,
+          height: 200,
         ),
       ),
     );

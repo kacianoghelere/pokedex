@@ -15,7 +15,7 @@ class RotationBenchmark extends StatelessWidget {
           opacity: 0.5,
           child: RotatingLogo(
             curve: Easing.standard,
-            duration: Duration(seconds: 1),
+            duration: Duration(seconds: 5),
           ),
         )
       ),
