@@ -149,7 +149,7 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
                   crossAxisCount: 4,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 8,
-                  childAspectRatio: 1.5,
+                  childAspectRatio: 1.3,
                 ),
                 itemCount: filterProvider.types.length,
                 itemBuilder: (context, index) {
@@ -164,8 +164,8 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
                         children: [
                           PokemonTypeImage(
                             PokemonTypeEnum.parse(pokemonType.type),
-                            height: 26,
-                            width: 26
+                            height: 30,
+                            width: 30
                           ),
                           Text(pokemonType.name)
                         ],

@@ -88,7 +88,7 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: darkPrimaryColor,
         ),
         bottomSheetTheme: BottomSheetThemeData(
-          backgroundColor: darkBackgroundColor,
+          backgroundColor: HSLColor.fromColor(darkBackgroundColor).withLightness(0.1).toColor(),
           modalBarrierColor: HSLColor.fromColor(darkBackgroundColor).withAlpha(0.75).toColor()
         ),
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
