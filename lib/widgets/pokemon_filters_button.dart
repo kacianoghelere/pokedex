@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:pokedex/models/pokemon_generation.dart';
+import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
@@ -9,60 +11,62 @@ import 'package:pokedex/utils/enums/pokemon_type.dart';
 import 'package:pokedex/widgets/pokemon_type_icon.dart';
 import 'package:provider/provider.dart';
 
-class PokemonListFiltersButton extends StatefulWidget {
-  const PokemonListFiltersButton({super.key});
+class PokemonFiltersButton extends StatefulWidget {
+  const PokemonFiltersButton({super.key});
 
   @override
-  State<PokemonListFiltersButton> createState() => _PokemonListFiltersButtonState();
+  State<PokemonFiltersButton> createState() => _PokemonFiltersButtonState();
 }
 
-class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
+class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
   Timer? _generationsFilterDebouncer;
   Timer? _typesFilterDebouncer;
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ThemeProvider>(
-      builder: (context, themeProvider, _) {
-        return SpeedDial(
-          animatedIcon: AnimatedIcons.menu_close,
-          overlayColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-          overlayOpacity: 0.5,
-          backgroundColor: Theme.of(context).primaryColor,
-          foregroundColor: Colors.white,
-          tooltip: 'Filters',
-          children: [
-            SpeedDialChild(
-              backgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-              foregroundColor: themeProvider.isDarkMode ? Colors.white : Colors.black,
-              child: const Icon(Icons.onetwothree_rounded),
-              label: 'Generations',
-              labelBackgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-              labelShadow: [],
-              labelStyle: TextStyle(
-                color: themeProvider.isDarkMode ? Colors.white : Colors.black,
-              ),
-              onTap: () {
-                _openGenerationFilter(context);
-              }
-            ),
-            SpeedDialChild(
-              backgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-              foregroundColor: themeProvider.isDarkMode ? Colors.white : Colors.black,
-              child: const Icon(Icons.energy_savings_leaf_sharp),
-              label: 'Types',
-              labelShadow: [],
-              labelStyle: TextStyle(
-                color: themeProvider.isDarkMode ? Colors.white : Colors.black
-              ),
-              labelBackgroundColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-              onTap: () {
-                _openTypeFilter(context);
-              }
-            ),
-          ],
-        );
-      },
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      overlayColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
+      overlayOpacity: 0.5,
+      backgroundColor: Theme.of(context).primaryColor,
+      foregroundColor: Colors.white,
+      tooltip: 'Filters',
+      children: [
+        _buildSpeedDialChild(
+          isDarkMode: themeProvider.isDarkMode,
+          child: const Icon(Icons.onetwothree_rounded),
+          label: 'Generations',
+          onTap: () => _openGenerationFilter(context)
+        ),
+        _buildSpeedDialChild(
+          isDarkMode: themeProvider.isDarkMode,
+          child: const Icon(Icons.energy_savings_leaf_sharp),
+          label: 'Types',
+          onTap: () => _openTypeFilter(context)
+        ),
+      ],
+    );
+  }
+
+  SpeedDialChild _buildSpeedDialChild({
+    required bool isDarkMode,
+    required String label,
+    required void Function() onTap,
+    Widget? child,
+  }) {
+    return SpeedDialChild(
+      backgroundColor: isDarkMode ? Colors.black : Colors.white,
+      foregroundColor: isDarkMode ? Colors.white : Colors.black,
+      child: child,
+      label: label,
+      labelShadow: [],
+      labelStyle: TextStyle(
+        color: isDarkMode ? Colors.white : Colors.black
+      ),
+      labelBackgroundColor: isDarkMode ? Colors.black : Colors.white,
+      onTap: onTap
     );
   }
 
@@ -81,8 +85,8 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
                   SliverGrid.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 4,
-                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
                       childAspectRatio: 3,
                     ),
                     itemCount: filterProvider.generations.length,
@@ -97,22 +101,10 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
                         label: Center(
                           child: Text(generation.name),
                         ),
-                        onSelected: (_) {
-                          Provider.of<FilterProvider>(context, listen: false)
-                            .toggleGenerationSelection(generation);
-
-                          if ((_generationsFilterDebouncer?.isActive ?? false)) {
-                            _generationsFilterDebouncer?.cancel();
-                          }
-
-                          _generationsFilterDebouncer = Timer(Durations.long4, () {
-                            Provider.of<PokemonProvider>(context, listen: false)
-                              .fetchPokemons(
-                                generations: filterProvider.selectedGenerations,
-                                pokemonTypes: filterProvider.selectedTypes
-                              );
-                          });
-                        },
+                        onSelected: (_) => _toggleGenerationSelection(
+                          context: context,
+                          generation: generation
+                        )
                       );
                     },
                   ),
@@ -123,6 +115,26 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
         );
       },
     );
+  }
+
+  void _toggleGenerationSelection({
+    required BuildContext context,
+    required PokemonGeneration generation
+  }) {
+    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
+    filterProvider.toggleGenerationSelection(generation);
+    
+    if ((_generationsFilterDebouncer?.isActive ?? false)) {
+      _generationsFilterDebouncer?.cancel();
+    }
+    
+    _generationsFilterDebouncer = Timer(Durations.long4, () {
+      Provider.of<PokemonProvider>(context, listen: false)
+        .fetchPokemons(
+          generations: filterProvider.selectedGenerations,
+          pokemonTypes: filterProvider.selectedTypes
+        );
+    });
   }
 
   void _openTypeFilter(BuildContext context) {
@@ -139,17 +151,16 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
                   _getBottomSheetHeader('Pokemon Types'),
                   SliverGrid.builder(
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      crossAxisSpacing: 4,
-                      mainAxisSpacing: 4,
-                      childAspectRatio: 2,
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 8,
+                      childAspectRatio: 1.5,
                     ),
                     itemCount: filterProvider.types.length,
                     itemBuilder: (context, index) {
                       final pokemonType = filterProvider.types[index];
 
                       return FilterChip(
-                        elevation: 1,
                         showCheckmark: false,
                         padding: const EdgeInsets.all(8),
                         selected: filterProvider.selectedTypes.contains(pokemonType),
@@ -165,22 +176,10 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
                             ],
                           ),
                         ),
-                        onSelected: (_) {
-                          Provider.of<FilterProvider>(context, listen: false)
-                            .toggleTypeSelection(pokemonType);
-
-                          if ((_typesFilterDebouncer?.isActive ?? false)) {
-                            _typesFilterDebouncer?.cancel();
-                          }
-
-                          _typesFilterDebouncer = Timer(Durations.long4, () {
-                            Provider.of<PokemonProvider>(context, listen: false)
-                              .fetchPokemons(
-                                generations: filterProvider.selectedGenerations,
-                                pokemonTypes: filterProvider.selectedTypes
-                              );
-                          });
-                        },
+                        onSelected: (_) => _toggleTypeSelection(
+                          context: context,
+                          type: pokemonType,
+                        )
                       );
                     }
                   ),
@@ -191,6 +190,26 @@ class _PokemonListFiltersButtonState extends State<PokemonListFiltersButton> {
         );
       },
     );
+  }
+
+  void _toggleTypeSelection({
+    required BuildContext context,
+    required PokemonType type
+  }) {
+    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
+    filterProvider.toggleTypeSelection(type);
+
+    if ((_typesFilterDebouncer?.isActive ?? false)) {
+      _typesFilterDebouncer?.cancel();
+    }
+
+    _typesFilterDebouncer = Timer(Durations.long4, () {
+      Provider.of<PokemonProvider>(context, listen: false)
+        .fetchPokemons(
+          generations: filterProvider.selectedGenerations,
+          pokemonTypes: filterProvider.selectedTypes
+        );
+    });
   }
 
   Widget _getBottomSheetHeader(String title) {
