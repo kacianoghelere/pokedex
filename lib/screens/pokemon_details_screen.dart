@@ -12,7 +12,7 @@ import 'package:pokedex/widgets/rotating_logo.dart';
 import 'package:pokedex/widgets/toggle_favorite_pokemon_button.dart';
 import 'package:provider/provider.dart';
 
-class PokemonDetailsScreen extends StatefulWidget {
+class PokemonDetailsScreen extends StatelessWidget {
   final Pokemon pokemon;
 
   const PokemonDetailsScreen({
@@ -20,11 +20,6 @@ class PokemonDetailsScreen extends StatefulWidget {
     required this.pokemon
   });
 
-  @override
-  State<PokemonDetailsScreen> createState() => _PokemonDetailsScreenState();
-}
-
-class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
   @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = [
@@ -38,7 +33,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
       child: Scaffold(
         body: Consumer<ThemeProvider>(
           builder: (context, themeProvider, _) {
-            final hslColor = HSLColor.fromColor(widget.pokemon.typeColor);
+            final hslColor = HSLColor.fromColor(pokemon.typeColor);
 
             final tabsColor = themeProvider.isDarkMode
               ? hslColor.withLightness(0.6).toColor()
@@ -46,7 +41,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
 
             final headerColor = themeProvider.isDarkMode
               ? hslColor.withLightness(0.25).toColor()
-              : widget.pokemon.typeColor;
+              : pokemon.typeColor;
 
             return NestedScrollView(
               headerSliverBuilder: (context, innerBoxIsScrolled) => [
@@ -57,25 +52,22 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
                   iconTheme: const IconThemeData(color: Colors.white),
                   pinned: true,
                   actions: [
-                    ToggleFavoritePokemonButton(pokemon: widget.pokemon)
+                    ToggleFavoritePokemonButton(pokemon: pokemon)
                   ],
                   flexibleSpace: FlexibleSpaceBar(
-                    background: _HeaderBackground(pokemon: widget.pokemon),
+                    background: _HeaderBackground(pokemon: pokemon),
                     centerTitle: true,
-                    title: Text(
-                      toBeginningOfSentenceCase(widget.pokemon.name),
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.bold,
-                        shadows: [
-                          const Shadow(
-                            blurRadius: 10,
-                            color: Colors.black87,
-                            offset: Offset(2.0, 2.0),
-                          )
-                        ]
-                      )
+                    // title: Text(
+                    //   toBeginningOfSentenceCase(pokemon.name),
+                    //   style: _getTitleStyle(context)
+                    // ),
+                    title: Builder(
+                      builder: (context) {
+                        return Text(
+                          toBeginningOfSentenceCase(pokemon.name) ?? 'Unknown Pokémon',
+                          style: _getTitleStyle(context),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -92,7 +84,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
                         image: DecorationImage(
                           image: const AssetImage("assets/images/pokeball-background.png"),
                           opacity: 0.2,
-                          colorFilter: ColorFilter.mode(widget.pokemon.typeColor, BlendMode.srcIn)
+                          colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn)
                         ),
                       ),
                       indicatorPadding: EdgeInsets.zero,
@@ -122,7 +114,7 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
                 ),
               ],
               body: FutureBuilder<PokemonDetailsResponse>(
-                future: PokemonService.fetchDetails(widget.pokemon.id),
+                future: PokemonService.fetchDetails(pokemon.id),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const _BackgroundBox(
@@ -136,22 +128,17 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
                     );
                   }
 
-                  if (snapshot.hasError || snapshot.data == null) {
+                  if (snapshot.hasError && snapshot.data == null) {
                     return _renderErrorAlert();
                   }
 
                   var (pokemonDetails, exception) = snapshot.data!;
 
-                  if (exception != null || pokemonDetails == null) {
-
-                    return _renderErrorAlert();
-                  }
-
                   return ColoredBox(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     child: TabBarView(
                       children: [
-                        PokemonInfoTab(pokemon: pokemonDetails),
+                        PokemonInfoTab(pokemon: pokemonDetails!),
                         PokemonMovesTab(pokemon: pokemonDetails),
                         PokemonEvolutionsTab(pokemon: pokemonDetails)
                       ],
@@ -163,6 +150,23 @@ class _PokemonDetailsScreenState extends State<PokemonDetailsScreen>  {
           }
         )
       ),
+    );
+  }
+
+  TextStyle _getTitleStyle(BuildContext context) {
+    final style = (Theme.of(context).textTheme.titleLarge ?? const TextStyle());
+
+    return style.copyWith(
+      color: Colors.white, // Fallback para cor branca.
+      fontFamily: 'Poppins',
+      fontWeight: FontWeight.bold,
+      shadows: [
+        const Shadow(
+          blurRadius: 10,
+          color: Colors.black87,
+          offset: Offset(2.0, 2.0),
+        ),
+      ],
     );
   }
 

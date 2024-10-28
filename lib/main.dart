@@ -59,16 +59,14 @@ class _MyAppState extends State<MyApp> {
 
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    const titleStyle = TextStyle(fontFamily: 'Poppins');
-
     // TODO: Fix dark theme issue with titles
-    const textThemeData = TextTheme(
-      headlineLarge: titleStyle,
-      headlineMedium: titleStyle,
-      headlineSmall: titleStyle,
-      titleLarge: titleStyle,
-      titleMedium: titleStyle,
-      titleSmall: titleStyle,
+    var textThemeData = const TextTheme(
+      headlineLarge: TextStyle(fontFamily: 'Poppins'),
+      headlineMedium: TextStyle(fontFamily: 'Poppins'),
+      headlineSmall: TextStyle(fontFamily: 'Poppins'),
+      titleLarge: TextStyle(fontFamily: 'Poppins'),
+      titleMedium: TextStyle(fontFamily: 'Poppins'),
+      titleSmall: TextStyle(fontFamily: 'Poppins'),
     );
 
     return MaterialApp(
@@ -88,7 +86,15 @@ class _MyAppState extends State<MyApp> {
           titleTextStyle: TextStyle(color: Colors.white),
           subtitleTextStyle: TextStyle(color: Colors.white70),
         ),
-        textTheme: textThemeData
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            fontFamily: 'Poppins',
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          titleMedium: TextStyle(fontFamily: 'Poppins', color: Colors.white),
+          titleSmall: TextStyle(fontFamily: 'Poppins', color: Colors.white),
+        ),
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(

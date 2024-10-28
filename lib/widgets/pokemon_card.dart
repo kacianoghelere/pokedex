@@ -79,13 +79,14 @@ class PokemonCard extends StatelessWidget {
         style: Theme.of(context).textTheme.titleLarge!.copyWith(
           fontFamily: 'Poppins',
           fontWeight: FontWeight.bold,
+          overflow: TextOverflow.ellipsis,
           shadows: isDarkMode ? [
             const Shadow(
               blurRadius: 1,
               color: Colors.black87,
               offset: Offset(1.0, 1.0),
             )
-          ] : null
+          ] : null,
         ),
       ),
     );

@@ -23,15 +23,15 @@ class PokemonTypeBadge extends StatelessWidget {
             padding: const EdgeInsets.all(1.0),
             child: PokemonTypeImage(
               PokemonTypeEnum.parse(type),
-              height: 26,
-              width: 26
+              height: 24,
+              width: 24
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left : 4.0, right: 8.0),
             child: Text(
               type.toUpperCase(),
-              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+              style: Theme.of(context).textTheme.labelSmall!.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               )
