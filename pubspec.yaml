@@ -76,6 +76,7 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/images/pokeball-background.png
+    - assets/images/pokeball-tabs-background.png
     - assets/images/pokemon_types/backgrounds/bug.jpg
     - assets/images/pokemon_types/backgrounds/dark.jpg
     - assets/images/pokemon_types/backgrounds/dragon.jpg

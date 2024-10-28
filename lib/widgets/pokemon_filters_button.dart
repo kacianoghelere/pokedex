@@ -57,70 +57,64 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
     Widget? child,
   }) {
     return SpeedDialChild(
-      backgroundColor: isDarkMode ? Colors.black : Colors.white,
-      foregroundColor: isDarkMode ? Colors.white : Colors.black,
+      backgroundColor: Theme.of(context).primaryColor,
       child: child,
+      foregroundColor: isDarkMode ? Colors.white : Colors.black,
       label: label,
+      labelBackgroundColor: isDarkMode ? Colors.black : Colors.white,
       labelShadow: [],
       labelStyle: TextStyle(
         color: isDarkMode ? Colors.white : Colors.black
       ),
-      labelBackgroundColor: isDarkMode ? Colors.black : Colors.white,
-      onTap: onTap
+      onTap: onTap,
+      shape: const CircleBorder()
     );
   }
 
   void _openGenerationFilter(BuildContext context) {
     showModalBottomSheet(
-      isDismissible: true,
+      constraints: const BoxConstraints(maxHeight: 400),
       context: context,
+      isDismissible: true,
       builder: (context) {
-        return Consumer<FilterProvider>(
-          builder: (context, filterProvider, _) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomScrollView(
-                slivers: [
-                  _getBottomSheetHeader('Pokemon Generations'),
-                  SliverGrid.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 3,
-                    ),
-                    itemCount: filterProvider.generations.length,
-                    itemBuilder: (context, index) {
-                      final generation = filterProvider.generations[index];
+        final filterProvider = Provider.of<FilterProvider>(context);
 
-                      return FilterChip(
-                        elevation: 1,
-                        showCheckmark: false,
-                        padding: EdgeInsets.zero,
-                        selected: filterProvider.selectedGenerations.contains(generation),
-                        label: Center(
-                          child: Text(generation.name),
-                        ),
-                        onSelected: (_) => _toggleGenerationSelection(
-                          context: context,
-                          generation: generation
-                        )
-                      );
-                    },
-                  ),
-                ],
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: CustomScrollView(
+            slivers: [
+              const _BottomSheetHeader(title: 'Pokemon Generations'),
+              SliverGrid.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 3,
+                ),
+                itemCount: filterProvider.generations.length,
+                itemBuilder: (context, index) {
+                  final generation = filterProvider.generations[index];
+
+                  return FilterChip(
+                    elevation: 1,
+                    showCheckmark: false,
+                    padding: EdgeInsets.zero,
+                    selected: filterProvider.selectedGenerations.contains(generation),
+                    label: Center(
+                      child: Text(generation.name),
+                    ),
+                    onSelected: (_) => _toggleGenerationSelection(generation)
+                  );
+                },
               ),
-            );
-          }
+            ],
+          ),
         );
       },
     );
   }
 
-  void _toggleGenerationSelection({
-    required BuildContext context,
-    required PokemonGeneration generation
-  }) {
+  void _toggleGenerationSelection(PokemonGeneration generation) {
     final filterProvider = Provider.of<FilterProvider>(context, listen: false);
     filterProvider.toggleGenerationSelection(generation);
     
@@ -139,63 +133,56 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
 
   void _openTypeFilter(BuildContext context) {
     showModalBottomSheet(
-      isDismissible: true,
+      constraints: const BoxConstraints(maxHeight: 400),
       context: context,
+      isDismissible: true,
       builder: (context) {
-        return Consumer<FilterProvider>(
-          builder: (context, filterProvider, _) {
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: CustomScrollView(
-                slivers: [
-                  _getBottomSheetHeader('Pokemon Types'),
-                  SliverGrid.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 8,
-                      mainAxisSpacing: 8,
-                      childAspectRatio: 1.5,
-                    ),
-                    itemCount: filterProvider.types.length,
-                    itemBuilder: (context, index) {
-                      final pokemonType = filterProvider.types[index];
+        final filterProvider = Provider.of<FilterProvider>(context);
 
-                      return FilterChip(
-                        showCheckmark: false,
-                        padding: const EdgeInsets.all(8),
-                        selected: filterProvider.selectedTypes.contains(pokemonType),
-                        label: Center(
-                          child: Column(
-                            children: [
-                              PokemonTypeImage(
-                                PokemonTypeEnum.parse(pokemonType.type),
-                                height: 26,
-                                width: 26
-                              ),
-                              Text(pokemonType.name)
-                            ],
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: CustomScrollView(
+            slivers: [
+              const _BottomSheetHeader(title: 'Pokemon Types'),
+              SliverGrid.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 4,
+                  crossAxisSpacing: 8,
+                  mainAxisSpacing: 8,
+                  childAspectRatio: 1.5,
+                ),
+                itemCount: filterProvider.types.length,
+                itemBuilder: (context, index) {
+                  final pokemonType = filterProvider.types[index];
+
+                  return FilterChip(
+                    showCheckmark: false,
+                    padding: const EdgeInsets.all(8),
+                    selected: filterProvider.selectedTypes.contains(pokemonType),
+                    label: Center(
+                      child: Column(
+                        children: [
+                          PokemonTypeImage(
+                            PokemonTypeEnum.parse(pokemonType.type),
+                            height: 26,
+                            width: 26
                           ),
-                        ),
-                        onSelected: (_) => _toggleTypeSelection(
-                          context: context,
-                          type: pokemonType,
-                        )
-                      );
-                    }
-                  ),
-                ],
+                          Text(pokemonType.name)
+                        ],
+                      ),
+                    ),
+                    onSelected: (_) => _toggleTypeSelection(pokemonType)
+                  );
+                }
               ),
-            );
-          }
+            ],
+          ),
         );
       },
     );
   }
 
-  void _toggleTypeSelection({
-    required BuildContext context,
-    required PokemonType type
-  }) {
+  void _toggleTypeSelection(PokemonType type) {
     final filterProvider = Provider.of<FilterProvider>(context, listen: false);
     filterProvider.toggleTypeSelection(type);
 
@@ -211,21 +198,30 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
         );
     });
   }
+}
 
-  Widget _getBottomSheetHeader(String title) {
+class _BottomSheetHeader extends StatelessWidget {
+  final String title;
+
+  const _BottomSheetHeader({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    var themeData = Theme.of(context);
+
     return SliverAppBar(
-      backgroundColor: Theme.of(context).bottomSheetTheme.backgroundColor,
-      pinned: true,
-
+      backgroundColor: themeData.bottomSheetTheme.backgroundColor,
       expandedHeight: 50.0,
       flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        collapseMode: CollapseMode.pin,
         title: Text(
           title,
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-            fontWeight: FontWeight.bold
-          )
+          style: themeData.textTheme.titleMedium
         ),
       ),
+      foregroundColor: themeData.textTheme.titleMedium!.color,
+      pinned: true,
     );
   }
 }

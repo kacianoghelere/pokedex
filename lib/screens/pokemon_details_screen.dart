@@ -13,6 +13,11 @@ import 'package:pokedex/widgets/toggle_favorite_pokemon_button.dart';
 import 'package:provider/provider.dart';
 
 class PokemonDetailsScreen extends StatelessWidget {
+  static const List<Tab> tabs = [
+    Tab(text: 'Info'),
+    Tab(text: 'Moves'),
+    Tab(text: 'Evolutions'),
+  ];
   final Pokemon pokemon;
 
   const PokemonDetailsScreen({
@@ -22,151 +27,146 @@ class PokemonDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Tab> tabs = [
-      const Tab(text: 'Info'),
-      const Tab(text: 'Moves'),
-      const Tab(text: 'Evolutions'),
-    ];
-
     return DefaultTabController(
       length: tabs.length,
       child: Scaffold(
-        body: Consumer<ThemeProvider>(
-          builder: (context, themeProvider, _) {
-            final hslColor = HSLColor.fromColor(pokemon.typeColor);
-
-            final tabsColor = themeProvider.isDarkMode
-              ? hslColor.withLightness(0.6).toColor()
-              : hslColor.withLightness(0.4).toColor();
-
-            final headerColor = themeProvider.isDarkMode
-              ? hslColor.withLightness(0.25).toColor()
-              : pokemon.typeColor;
-
-            return NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) => [
-                SliverAppBar(
-                  backgroundColor: headerColor,
-                  expandedHeight: 300.0,
-                  floating: false,
-                  iconTheme: const IconThemeData(color: Colors.white),
-                  pinned: true,
-                  actions: [
-                    ToggleFavoritePokemonButton(pokemon: pokemon)
-                  ],
-                  flexibleSpace: FlexibleSpaceBar(
-                    background: _HeaderBackground(pokemon: pokemon),
-                    centerTitle: true,
-                    // title: Text(
-                    //   toBeginningOfSentenceCase(pokemon.name),
-                    //   style: _getTitleStyle(context)
-                    // ),
-                    title: Builder(
-                      builder: (context) {
-                        return Text(
-                          toBeginningOfSentenceCase(pokemon.name) ?? 'Unknown Pokémon',
-                          style: _getTitleStyle(context),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                SliverPersistentHeader(
-                  delegate: _SliverTabBarDelegate(
-                    TabBar(
-                      dividerHeight: 1,
-                      dividerColor: themeProvider.isDarkMode
-                        ? Colors.grey.shade600
-                        : Colors.grey.shade200,
-                      indicatorColor: tabsColor,
-                      indicator: ShapeDecoration(
-                        shape: const CircleBorder(),
-                        image: DecorationImage(
-                          image: const AssetImage("assets/images/pokeball-background.png"),
-                          opacity: 0.2,
-                          colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn)
-                        ),
-                      ),
-                      indicatorPadding: EdgeInsets.zero,
-                      indicatorSize: TabBarIndicatorSize.tab,
-                      indicatorWeight: 3.0,
-                      labelColor: tabsColor,
-                      labelStyle: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        shadows: [
-                          Shadow(
-                            blurRadius: 1,
-                            color: Colors.white12,
-                            offset: Offset(0, 0),
-                          )
-                        ]
-                      ),
-                      unselectedLabelStyle: TextStyle(
-                        color: Colors.grey.shade600,
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16
-                      ),
-                      tabs: tabs,
-                    ),
-                  ),
-                  pinned: true,
-                ),
-              ],
-              body: FutureBuilder<PokemonDetailsResponse>(
-                future: PokemonService.fetchDetails(pokemon.id),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const _BackgroundBox(
-                      child: Opacity(
-                        opacity: 0.3,
-                        child: RotatingLogo(
-                          duration: Durations.extralong4,
-                          curve: Easing.standard
-                        )
-                      )
-                    );
-                  }
-
-                  if (snapshot.hasError && snapshot.data == null) {
-                    return _renderErrorAlert();
-                  }
-
-                  var (pokemonDetails, exception) = snapshot.data!;
-
-                  return ColoredBox(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    child: TabBarView(
-                      children: [
-                        PokemonInfoTab(pokemon: pokemonDetails!),
-                        PokemonMovesTab(pokemon: pokemonDetails),
-                        PokemonEvolutionsTab(pokemon: pokemonDetails)
-                      ],
-                    ),
-                  );
-                }
-              ),
-            );
-          }
+        body: NestedScrollView(
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            _renderHeader(context),
+            _renderTabs(context),
+          ],
+          body: _renderBody()
         )
       ),
     );
   }
 
-  TextStyle _getTitleStyle(BuildContext context) {
-    final style = (Theme.of(context).textTheme.titleLarge ?? const TextStyle());
+  Widget _renderHeader(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
-    return style.copyWith(
-      color: Colors.white, // Fallback para cor branca.
-      fontFamily: 'Poppins',
-      fontWeight: FontWeight.bold,
-      shadows: [
-        const Shadow(
-          blurRadius: 10,
-          color: Colors.black87,
-          offset: Offset(2.0, 2.0),
-        ),
+    final headerColor = themeProvider.isDarkMode
+      ? hslColor.withLightness(0.25).toColor()
+      : pokemon.typeColor;
+
+    return SliverAppBar(
+      backgroundColor: headerColor,
+      expandedHeight: 300.0,
+      floating: false,
+      iconTheme: const IconThemeData(color: Colors.white),
+      pinned: true,
+      actions: [
+        ToggleFavoritePokemonButton(pokemon: pokemon)
       ],
+      flexibleSpace: FlexibleSpaceBar(
+        background: _HeaderBackground(pokemon: pokemon),
+        centerTitle: true,
+        title: Builder(
+          builder: (context) {
+            return Text(
+              toBeginningOfSentenceCase(pokemon.name),
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                shadows: [
+                  const Shadow(
+                    blurRadius: 10,
+                    color: Colors.black87,
+                    offset: Offset(2.0, 2.0),
+                  ),
+                ],
+              )
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _renderTabs(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
+    final tabsColor = themeProvider.isDarkMode
+      ? hslColor.withLightness(0.6).toColor()
+      : hslColor.withLightness(0.4).toColor();
+
+    return SliverPersistentHeader(
+      pinned: true,
+      delegate: _SliverTabBarDelegate(
+        TabBar(
+          dividerHeight: 1,
+          dividerColor: themeProvider.isDarkMode
+            ? Colors.grey.shade600
+            : Colors.grey.shade200,
+          indicator: ShapeDecoration(
+            shape: const RoundedRectangleBorder(),
+            image: DecorationImage(
+              image: const AssetImage("assets/images/pokeball-tabs-background.png"),
+              opacity: 0.2,
+              colorFilter: ColorFilter.mode(pokemon.typeColor, BlendMode.srcIn)
+            ),
+          ),
+          indicatorColor: tabsColor,
+          indicatorPadding: EdgeInsets.zero,
+          indicatorSize: TabBarIndicatorSize.tab,
+          indicatorWeight: 3.0,
+          labelColor: tabsColor,
+          labelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            shadows: [
+              Shadow(
+                blurRadius: 1,
+                color: Colors.white12,
+                offset: Offset(0, 0),
+              )
+            ]
+          ),
+          unselectedLabelStyle: TextStyle(
+            color: Colors.grey.shade600,
+            fontWeight: FontWeight.normal,
+            fontSize: 16
+          ),
+          tabs: tabs,
+        ),
+      ),
+    );
+  }
+
+  Widget _renderBody() {
+    return FutureBuilder<PokemonDetailsResponse>(
+      future: PokemonService.fetchDetails(pokemon.id),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const _BackgroundBox(
+            child: Opacity(
+              opacity: 0.3,
+              child: RotatingLogo(
+                duration: Durations.extralong4,
+                curve: Easing.standard
+              )
+            )
+          );
+        }
+
+        if (snapshot.hasError && snapshot.data == null) {
+          return _renderErrorAlert();
+        }
+
+        var (pokemonDetails, exception) = snapshot.data!;
+
+        if (exception != null || pokemonDetails == null) {
+          return _renderErrorAlert();
+        }
+
+        return ColoredBox(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: TabBarView(
+            children: [
+              PokemonInfoTab(pokemon: pokemonDetails),
+              PokemonMovesTab(pokemon: pokemonDetails),
+              PokemonEvolutionsTab(pokemon: pokemonDetails)
+            ],
+          ),
+        );
+      }
     );
   }
 
@@ -174,6 +174,10 @@ class PokemonDetailsScreen extends StatelessWidget {
     return const _BackgroundBox(
       child: Text('Error while loading pokemon data')
     );
+  }
+
+  HSLColor get hslColor {
+    return HSLColor.fromColor(pokemon.typeColor);
   }
 }
 
@@ -184,7 +188,7 @@ class _HeaderBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        return Stack(
+    return Stack(
       children: [
         Positioned(
           child: Opacity(
@@ -218,10 +222,10 @@ class _BackgroundBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var hslColor = HSLColor.fromColor(Theme.of(context).scaffoldBackgroundColor);
+    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
 
     return ColoredBox(
-      color: hslColor.withLightness(0.92).toColor(),
+      color: HSLColor.fromColor(scaffoldBackgroundColor).withLightness(0.92).toColor(),
       child: Center(
         child: child
       )

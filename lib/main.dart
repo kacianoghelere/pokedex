@@ -63,6 +63,23 @@ class _MyAppState extends State<MyApp> {
 
     const darkBackgroundColor = Color.fromRGBO(5, 5, 5, 1);
 
+    const titleStyle = TextStyle(
+      fontFamily: 'Poppins',
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+    );
+
+    final TextStyle darkTitleStyle = titleStyle.copyWith(color: Colors.white);
+
+    var textTheme = const TextTheme(
+      headlineLarge: TextStyle(fontFamily: 'Poppins'),
+      headlineMedium: TextStyle(fontFamily: 'Poppins'),
+      headlineSmall: TextStyle(fontFamily: 'Poppins'),
+      titleLarge: titleStyle,
+      titleMedium: titleStyle,
+      titleSmall: titleStyle,
+    );
+
     return MaterialApp(
       title: 'Pokédex',
       themeMode: themeProvider.mode,
@@ -88,16 +105,14 @@ class _MyAppState extends State<MyApp> {
         ),
         primaryColor: darkPrimaryColor.toMaterialColor(),
         scaffoldBackgroundColor: darkBackgroundColor,
-        textTheme: const TextTheme(
-          titleLarge: TextStyle(
-            fontFamily: 'Poppins',
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-          titleMedium: TextStyle(fontFamily: 'Poppins', color: Colors.white),
-          titleSmall: TextStyle(fontFamily: 'Poppins', color: Colors.white),
+        textTheme: TextTheme(
+          headlineLarge: const TextStyle(fontFamily: 'Poppins'),
+          headlineMedium: const TextStyle(fontFamily: 'Poppins'),
+          headlineSmall: const TextStyle(fontFamily: 'Poppins'),
+          titleLarge: darkTitleStyle,
+          titleMedium: darkTitleStyle,
+          titleSmall: darkTitleStyle,
         ),
-
       ),
       theme: ThemeData(
         appBarTheme: AppBarTheme(
@@ -121,14 +136,7 @@ class _MyAppState extends State<MyApp> {
         listTileTheme: const ListTileThemeData(
           minTileHeight: 32
         ),
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(fontFamily: 'Poppins'),
-          headlineMedium: TextStyle(fontFamily: 'Poppins'),
-          headlineSmall: TextStyle(fontFamily: 'Poppins'),
-          titleLarge: TextStyle(fontFamily: 'Poppins'),
-          titleMedium: TextStyle(fontFamily: 'Poppins'),
-          titleSmall: TextStyle(fontFamily: 'Poppins'),
-        )
+        textTheme: textTheme
       ),
       builder: (context, widget) {
         PokemonTypesHelper.precacheTypeImages(context);
