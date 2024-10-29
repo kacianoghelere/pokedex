@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/utils/enums/pokemon_type.dart';
-import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/widgets/pokemon_type_icon.dart';
 
 class PokemonTypeBadge extends StatelessWidget {
@@ -10,11 +10,13 @@ class PokemonTypeBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color typeColor = getTypeColor(type);
+    Color typeColor = PokemonTypesHelper.getTypeColor(type);
+
+    HSLColor hslColor = HSLColor.fromColor(typeColor);
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: HSLColor.fromColor(typeColor).withLightness(0.3).toColor(),
+        color: hslColor.withLightness(0.3).toColor(),
         borderRadius: BorderRadius.circular(16.0)
       ),
       child: Row(

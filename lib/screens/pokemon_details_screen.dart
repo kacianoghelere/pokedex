@@ -192,14 +192,11 @@ class _HeaderBackground extends StatelessWidget {
     return Stack(
       children: [
         Positioned(
-          child: Opacity(
-            opacity: 0.8,
-            child: Image.asset(
-              PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
-              width: MediaQuery.sizeOf(context).width,
-              height: 500,
-              fit: BoxFit.cover,
-            ),
+          child: Image.asset( // TODO: Add sprite zoom
+            PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
+            width: MediaQuery.sizeOf(context).width,
+            height: 500,
+            fit: BoxFit.cover,
           ),
         ),
         Center(

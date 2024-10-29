@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:pokedex/models/pokemon_type.dart';
-import 'package:pokedex/utils/pokemon_type_colors.dart';
+import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 
 part 'pokemon.g.dart';
 
@@ -48,6 +48,6 @@ class Pokemon {
   }
 
   Color get typeColor {
-    return getTypeColor(mainType.name);
+    return PokemonTypesHelper.getTypeColor(mainType.name);
   }
 }
