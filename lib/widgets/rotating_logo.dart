@@ -44,16 +44,23 @@ class _RotatingLogoState extends State<RotatingLogo>
 
   @override
   Widget build(BuildContext context) {
-    return TickerMode(
-      enabled: ModalRoute.of(context)?.isCurrent ?? true,
-      child: RotationTransition(
-        turns: _animation,
-        filterQuality: FilterQuality.none,
+    return RepaintBoundary(
+      child: AnimatedBuilder(
+        animation: _animation,
+        builder: (context, child) {
+          return RotationTransition(
+            turns: _animation,
+            filterQuality: FilterQuality.none,
+            child: child
+          );
+        },
         child: Image.asset(
           'assets/images/pokeball-background.png',
-          filterQuality: FilterQuality.none,
           width: 200,
           height: 200,
+          cacheWidth: 200,
+          cacheHeight: 200,
+          filterQuality: FilterQuality.low,
         ),
       ),
     );

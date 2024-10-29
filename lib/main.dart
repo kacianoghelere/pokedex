@@ -46,11 +46,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   initState() {
-    super.initState();
-
     Provider.of<FilterProvider>(context, listen: false).fetchFilterData();
     
     Provider.of<ThemeProvider>(context, listen: false).loadTheme();
+
+    super.initState();
   }
 
   @override
@@ -81,7 +81,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      showPerformanceOverlay: true,
+      showPerformanceOverlay: false,
       title: 'Pokédex',
       themeMode: themeProvider.mode,
       darkTheme: ThemeData.dark(useMaterial3: true).copyWith(

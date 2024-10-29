@@ -223,10 +223,8 @@ class _BackgroundBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-
     return ColoredBox(
-      color: HSLColor.fromColor(scaffoldBackgroundColor).withLightness(0.92).toColor(),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Center(
         child: child
       )
