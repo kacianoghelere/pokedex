@@ -5,13 +5,13 @@ import 'package:pokedex/widgets/pokemon_card.dart';
 
 class PokemonList extends StatelessWidget {
   final List<Pokemon> pokemons;
-  bool shrinkWrap;
+  final bool shrinkWrap;
 
-  PokemonList({
+  const PokemonList({
     super.key,
     required this.pokemons,
-    bool? shrinkWrap
-  }): shrinkWrap = shrinkWrap ?? false;
+    this.shrinkWrap = false
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +20,7 @@ class PokemonList extends StatelessWidget {
     }
 
     return ListView.builder(
+      addRepaintBoundaries: true,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       shrinkWrap: shrinkWrap,
       itemCount: pokemons.length,

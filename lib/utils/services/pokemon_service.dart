@@ -58,6 +58,7 @@ class PokemonService {
   }
 
   static Future<PokemonFiltersResponse> fetchFilters() async {
+    // FIXME: Fix generations query to retrieve 3 main species sprites
     var response = await _executeQuery(QueryOptions(
       document: gql(fetchFiltersDataQuery)
     ));

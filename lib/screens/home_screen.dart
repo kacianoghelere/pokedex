@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/screens/rotation_benchmark.dart';
+import 'package:pokedex/widgets/error_indicator.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 import 'package:pokedex/widgets/pokemon_filters_button.dart';
 import 'package:pokedex/widgets/show_favorites_button.dart';
@@ -73,6 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Consumer2<FilterProvider, PokemonProvider>(
           builder: (context, filterProvider, pokemonProvider, _) {
+            if (pokemonProvider.hasException) {
+              return const ErrorIndicator();
+            }
+
             final pokemons = filterProvider.showFavoritesOnly
               ? pokemonProvider.favorites
               : pokemonProvider.pokemons;

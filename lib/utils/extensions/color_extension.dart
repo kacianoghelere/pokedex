@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/providers/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 extension ColorExtension on Color {
   MaterialColor toMaterialColor() {
@@ -27,10 +29,12 @@ extension ColorExtension on Color {
   }
 
   Color get lightVariant {
-    return HSLColor.fromColor(this).withLightness(0.7).toColor();
+    return HSLColor.fromColor(this).withLightness(0.8).toColor();
   }
 
-  Color getColorByThemeMode(ThemeMode themeMode) {
+  Color getColorByThemeMode(BuildContext context) {
+    final ThemeMode themeMode = Provider.of<ThemeProvider>(context).mode;
+
     return switch(themeMode) {
       ThemeMode.dark => darkVariant,
       ThemeMode.light => lightVariant,

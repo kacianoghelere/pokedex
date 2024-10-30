@@ -4,6 +4,7 @@ import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
+import 'package:pokedex/widgets/error_indicator.dart';
 import 'package:pokedex/widgets/pokemon_info_tab.dart';
 import 'package:pokedex/widgets/pokemon_evolutions_tab.dart';
 import 'package:pokedex/widgets/pokemon_moves_tab.dart';
@@ -146,7 +147,6 @@ class PokemonDetailsScreen extends StatelessWidget {
               opacity: 0.3,
               child: RotatingLogo(
                 duration: Durations.extralong4,
-                curve: Easing.standard
               )
             )
           );
@@ -178,7 +178,7 @@ class PokemonDetailsScreen extends StatelessWidget {
 
   Widget _renderErrorAlert() {
     return const _BackgroundBox(
-      child: Text('Error while loading pokemon data')
+      child: ErrorIndicator()
     );
   }
 

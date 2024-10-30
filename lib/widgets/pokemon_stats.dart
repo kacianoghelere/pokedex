@@ -61,7 +61,7 @@ class PokemonStats extends StatelessWidget {
                   ),
                   lineHeight: 20.0,
                   percent: _getStatValue(stat),
-                  progressColor: pokemon.typeColor.getColorByThemeMode(themeMode),
+                  progressColor: pokemon.typeColor.getColorByThemeMode(context),
                 ),
               ),
             );

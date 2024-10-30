@@ -78,6 +78,18 @@ class FilterProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void clearGenerationFilter() {
+    _selectedGenerations.clear();
+
+    notifyListeners();
+  }
+
+  void clearTypeFilter() {
+    _selectedTypes.clear();
+
+    notifyListeners();
+  }
+
   void clearFilters() {
     _selectedGenerations.clear();
 

@@ -8,6 +8,7 @@ import 'package:pokedex/utils/services/pokemon_service.dart';
 class PokemonProvider with ChangeNotifier {
   final Box<Pokemon> _favoritesBox = Hive.box<Pokemon>('favorite_pokemons');
   List<Pokemon> _pokemons = [];
+  bool hasException = false;
 
   List<Pokemon> get pokemons => _pokemons;
 
@@ -37,13 +38,7 @@ class PokemonProvider with ChangeNotifier {
 
     final (result, exception) = await PokemonService.fetchList(where);
 
-    if (exception != null) {
-      if (kDebugMode) {
-        debugPrint("fetchPokemons ${exception.toString()}");
-      }
-
-      return;
-    }
+    hasException = exception != null;
 
     _pokemons = result ?? [];
 

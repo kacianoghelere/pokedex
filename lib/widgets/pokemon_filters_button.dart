@@ -84,7 +84,14 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
           padding: const EdgeInsets.all(16.0),
           child: CustomScrollView(
             slivers: [
-              const _BottomSheetHeader(title: 'Pokemon Generations'),
+              _BottomSheetHeader(
+                onClearFilter: () {
+                  filterProvider.clearGenerationFilter();
+
+                  _fetchPokemonsList();
+                },
+                title: 'Pokemon Generations',
+              ),
               SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
@@ -115,20 +122,26 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
     );
   }
 
-  void _toggleGenerationSelection(PokemonGeneration generation) {
+  void _fetchPokemonsList() {
     final filterProvider = Provider.of<FilterProvider>(context, listen: false);
-    filterProvider.toggleGenerationSelection(generation);
-    
+
+    Provider.of<PokemonProvider>(context, listen: false)
+      .fetchPokemons(
+        generations: filterProvider.selectedGenerations,
+        pokemonTypes: filterProvider.selectedTypes
+      );
+  }
+
+  void _toggleGenerationSelection(PokemonGeneration generation) {
+    Provider.of<FilterProvider>(context, listen: false)
+      .toggleGenerationSelection(generation);
+
     if ((_generationsFilterDebouncer?.isActive ?? false)) {
       _generationsFilterDebouncer?.cancel();
     }
-    
+
     _generationsFilterDebouncer = Timer(Durations.long4, () {
-      Provider.of<PokemonProvider>(context, listen: false)
-        .fetchPokemons(
-          generations: filterProvider.selectedGenerations,
-          pokemonTypes: filterProvider.selectedTypes
-        );
+      _fetchPokemonsList();
     });
   }
 
@@ -144,7 +157,14 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
           padding: const EdgeInsets.all(16.0),
           child: CustomScrollView(
             slivers: [
-              const _BottomSheetHeader(title: 'Pokemon Types'),
+              _BottomSheetHeader(
+                onClearFilter: () {
+                  filterProvider.clearTypeFilter();
+
+                  _fetchPokemonsList();
+                },
+                title: 'Pokemon Types',
+              ),
               SliverGrid.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
@@ -184,35 +204,40 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
   }
 
   void _toggleTypeSelection(PokemonType type) {
-    final filterProvider = Provider.of<FilterProvider>(context, listen: false);
-    filterProvider.toggleTypeSelection(type);
+    Provider.of<FilterProvider>(context, listen: false)
+      .toggleTypeSelection(type);
 
     if ((_typesFilterDebouncer?.isActive ?? false)) {
       _typesFilterDebouncer?.cancel();
     }
 
     _typesFilterDebouncer = Timer(Durations.long4, () {
-      Provider.of<PokemonProvider>(context, listen: false)
-        .fetchPokemons(
-          generations: filterProvider.selectedGenerations,
-          pokemonTypes: filterProvider.selectedTypes
-        );
+      _fetchPokemonsList();
     });
   }
 }
 
 class _BottomSheetHeader extends StatelessWidget {
+  final void Function() onClearFilter;
   final String title;
 
-  const _BottomSheetHeader({required this.title});
+  const _BottomSheetHeader({
+    required this.onClearFilter,
+    required this.title,
+  });
 
   @override
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
 
     return SliverAppBar(
+      actions: [
+        TextButton(
+          onPressed: onClearFilter,
+          child: const Text("Clear"),
+        )
+      ],
       backgroundColor: themeData.bottomSheetTheme.backgroundColor,
-      expandedHeight: 50.0,
       flexibleSpace: FlexibleSpaceBar(
         centerTitle: true,
         collapseMode: CollapseMode.pin,
