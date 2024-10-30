@@ -18,6 +18,7 @@ class PokemonTypesHelper {
     }
 
     precacheImage(const AssetImage("assets/images/pokeball-background.png"), context);
+    precacheImage(const AssetImage("assets/images/confused-pikachu.png"), context);
   }
 
   static Color getTypeColor(String type) {

@@ -60,12 +60,17 @@ class PokemonDetailsScreen extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         background: _HeaderBackground(pokemon: pokemon),
         centerTitle: true,
-        title: Builder(
-          builder: (context) {
-            return Text(
+        title: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: MediaQuery.sizeOf(context).width * 0.85,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Text(
               toBeginningOfSentenceCase(pokemon.name),
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                 color: Colors.white,
+                overflow: TextOverflow.ellipsis,
                 shadows: [
                   const Shadow(
                     blurRadius: 10,
@@ -74,9 +79,9 @@ class PokemonDetailsScreen extends StatelessWidget {
                   ),
                 ],
               )
-            );
-          },
-        ),
+            ),
+          ),
+        )
       ),
     );
   }
