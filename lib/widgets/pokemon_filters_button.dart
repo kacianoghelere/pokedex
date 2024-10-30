@@ -59,12 +59,13 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
     return SpeedDialChild(
       backgroundColor: Theme.of(context).primaryColor,
       child: child,
-      foregroundColor: isDarkMode ? Colors.white : Colors.black,
+      foregroundColor: Colors.white,
       label: label,
-      labelBackgroundColor: isDarkMode ? Colors.black : Colors.white,
+      labelBackgroundColor: Colors.black,
       labelShadow: [],
-      labelStyle: TextStyle(
-        color: isDarkMode ? Colors.white : Colors.black
+      labelStyle: const TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold
       ),
       onTap: onTap,
       shape: const CircleBorder()
