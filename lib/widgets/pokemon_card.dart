@@ -4,7 +4,6 @@ import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/screens/pokemon_details_screen.dart';
 import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
-import 'package:pokedex/utils/pokemon_type_colors.dart';
 import 'package:pokedex/widgets/pokemon_sprite.dart';
 import 'package:pokedex/widgets/pokemon_types.dart';
 import 'package:provider/provider.dart';
@@ -16,8 +15,6 @@ class PokemonCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final typeColor = getTypeColor(pokemon.types.first.name);
-
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -38,7 +35,7 @@ class PokemonCard extends StatelessWidget {
                   opacity: 0.15,
                   image: AssetImage(PokemonTypesHelper.getTypeBackground(pokemon.mainType.type))
                 ),
-                color: typeColor,
+                color: pokemon.typeColor,
                 gradient: _getBackgroundGradient(context),
                 borderRadius: BorderRadius.circular(16),
               ),

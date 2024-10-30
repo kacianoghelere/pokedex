@@ -40,6 +40,7 @@ class PokemonTypesHelper {
       'rock' => const Color(0xFFC7B78B),
       'shadow' => const Color(0xFF6439A0),
       'steel' => const Color(0xFF5A8EA1),
+      'stellar' => const Color(0xFFCC0000),
       'water' => const Color(0xFF4D90D5),
       _ => const Color(0xFFCC0000)
     };
