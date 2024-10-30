@@ -6,7 +6,6 @@ import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/utils/enums/pokemon_type.dart';
 import 'package:pokedex/widgets/pokemon_type_icon.dart';
 import 'package:provider/provider.dart';
@@ -24,34 +23,40 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
-
-    return SpeedDial(
-      animatedIcon: AnimatedIcons.menu_close,
-      overlayColor: themeProvider.isDarkMode ? Colors.black : Colors.white,
-      overlayOpacity: 0.5,
-      backgroundColor: Theme.of(context).primaryColor,
-      foregroundColor: Colors.white,
-      tooltip: 'Filters',
-      children: [
-        _buildSpeedDialChild(
-          isDarkMode: themeProvider.isDarkMode,
-          child: const Icon(Icons.onetwothree_rounded),
-          label: 'Generations',
-          onTap: () => _openGenerationFilter(context)
-        ),
-        _buildSpeedDialChild(
-          isDarkMode: themeProvider.isDarkMode,
-          child: const Icon(Icons.energy_savings_leaf_sharp),
-          label: 'Types',
-          onTap: () => _openTypeFilter(context)
-        ),
-      ],
+    return Consumer<FilterProvider>(
+      builder: (context, filterProvider, _) {
+        return SpeedDial(
+          animatedIcon: AnimatedIcons.menu_close,
+          overlayColor: Colors.black,
+          overlayOpacity: 0.5,
+          backgroundColor: Theme.of(context).primaryColor,
+          foregroundColor: Colors.white,
+          tooltip: 'Filters',
+          children: [
+            _buildSpeedDialChild(
+              child: const Icon(Icons.onetwothree_rounded),
+              label: 'Generations',
+              onTap: () => _openGenerationFilter(context)
+            ),
+            _buildSpeedDialChild(
+              child: const Icon(Icons.energy_savings_leaf_sharp),
+              label: 'Types',
+              onTap: () => _openTypeFilter(context)
+            ),
+            _buildSpeedDialChild(
+              child: Icon(
+                filterProvider.showFavoritesOnly ? Icons.list : Icons.favorite
+              ),
+              label: filterProvider.showFavoritesOnly ? 'Show all' : 'Show favorites',
+              onTap: () => filterProvider.toggleFavoritesOnly()
+            ),
+          ],
+        );
+      }
     );
   }
 
   SpeedDialChild _buildSpeedDialChild({
-    required bool isDarkMode,
     required String label,
     required void Function() onTap,
     Widget? child,

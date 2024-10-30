@@ -40,8 +40,8 @@ class PokemonSprite extends StatelessWidget {
             ),
           ).animate(
             delay: const Duration(milliseconds: 300),
-            onPlay: (controller) => controller.loop(),
-            onComplete: (controller) => controller.stop(),
+            // FIXME: Fix the animations cost
+            // onPlay: (controller) => controller.repeat(reverse: true),
             effects: [
               const RotateEffect(
                 curve: Easing.linear,

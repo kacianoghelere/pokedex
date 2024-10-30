@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/screens/rotation_benchmark.dart';
 import 'package:pokedex/widgets/error_indicator.dart';
 import 'package:pokedex/widgets/pokemon_list.dart';
 import 'package:pokedex/widgets/pokemon_filters_button.dart';
-import 'package:pokedex/widgets/show_favorites_button.dart';
 import 'package:pokedex/widgets/toggle_theme_button.dart';
 import 'package:provider/provider.dart';
 
@@ -52,20 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
               )
             ]
           ),
-        actions: [
-          const ShowFavoritesButton(),
-          const ThemeToggleButton(),
-          IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const RotationBenchmark()
-                ),
-              );
-            },
-            icon: const Icon(Icons.rotate_right_sharp)
-          )
+        actions: const [
+          ThemeToggleButton(),
         ],
         actionsIconTheme: const IconThemeData(
           color: Colors.white
