@@ -27,7 +27,7 @@ class PokemonTypesHelper {
       'dragon' => const Color(0xFF0A6DC4),
       'electric' => const Color(0xFFF7D02C),
       'fairy' => const Color(0xFFEC8FE6),
-      'fighting' => const Color(0xFFC22E28),
+      'fighting' => const Color(0xFFC22851),
       'fire' => const Color(0xFFFF9C54),
       'flying' => const Color(0xFF8FA8DD),
       'ghost' => const Color(0xFF5269AC),
@@ -38,9 +38,10 @@ class PokemonTypesHelper {
       'poison' => const Color(0xFFAB6AC8),
       'psychic' => const Color(0xFFF97176),
       'rock' => const Color(0xFFC7B78B),
+      'shadow' => const Color(0xFF6439A0),
       'steel' => const Color(0xFF5A8EA1),
       'water' => const Color(0xFF4D90D5),
-      _ => Colors.grey
+      _ => const Color(0xFFCC0000)
     };
   }
 
