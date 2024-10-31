@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon.dart';
+import 'package:pokedex/providers/favorite_pokemons_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +20,8 @@ class ToggleFavoritePokemonButton extends StatelessWidget {
             pokemon.isFavorite ? Icons.favorite : Icons.favorite_border,
           ),
           onPressed: () {
-            Provider.of<PokemonProvider>(context, listen: false).toggleFavorite(pokemon);
+            Provider.of<FavoritePokemonsProvider>(context, listen: false)
+              .toggleFavorite(pokemon);
           },
         );
       },

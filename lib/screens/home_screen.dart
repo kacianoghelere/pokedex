@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/providers/favorite_pokemons_provider.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/widgets/error_indicator.dart';
@@ -22,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _fetchPokemons();
   }
 
-  void _fetchPokemons() {
+  void _fetchPokemons({int page = 0}) {
     final filterProvider = Provider.of<FilterProvider>(context, listen: false);
 
     final pokemonProvider = Provider.of<PokemonProvider>(context, listen: false);
@@ -30,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     pokemonProvider.fetchPokemons(
       generations: filterProvider.selectedGenerations,
       pokemonTypes: filterProvider.selectedTypes,
+      page: page
     );
   }
 
@@ -58,17 +60,25 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: SafeArea(
-        child: Consumer2<FilterProvider, PokemonProvider>(
-          builder: (context, filterProvider, pokemonProvider, _) {
+        child: Consumer3<FilterProvider, PokemonProvider, FavoritePokemonsProvider>(
+          builder: (context, filterProvider, pokemonProvider, favoritesProvider, _) {
             if (pokemonProvider.hasException) {
               return const ErrorIndicator();
             }
 
             final pokemons = filterProvider.showFavoritesOnly
-              ? pokemonProvider.favorites
+              ? favoritesProvider.favorites
               : pokemonProvider.pokemons;
 
-            return PokemonList(pokemons: pokemons);
+            return PokemonList(
+              pokemons: pokemons,
+              onEdgeReached: () {
+                _fetchPokemons(page: pokemonProvider.currentPage + 1);
+              },
+              onSearchTextChanged: (String text) {
+                debugPrint("Searching $text");
+              },
+            );
           }
         )
       ),

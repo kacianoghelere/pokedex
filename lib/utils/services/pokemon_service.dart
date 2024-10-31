@@ -88,11 +88,17 @@ class PokemonService {
     return ((generations, types), null);
   }
 
-  static Future<PokemonListResponse> fetchList(Map<String, dynamic>? where) async {
+  static Future<PokemonListResponse> fetchList({
+    required int limit,
+    required int offset,
+    Map<String, dynamic>? where,
+  }) async {
     var response = await _executeQuery(QueryOptions(
       document: gql(fetchPokemonsQuery),
       variables: {
-        'where': where == null || where.isEmpty ? null : where
+        'where': where == null || where.isEmpty ? null : where,
+        'limit': limit,
+        'offset': offset,
       }
     ));
 

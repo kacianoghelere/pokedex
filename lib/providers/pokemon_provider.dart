@@ -1,23 +1,30 @@
 import 'package:flutter/foundation.dart';
-import 'package:hive/hive.dart';
 import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
 
 class PokemonProvider with ChangeNotifier {
-  final Box<Pokemon> _favoritesBox = Hive.box<Pokemon>('favorite_pokemons');
-  List<Pokemon> _pokemons = [];
-  bool hasException = false;
+  final List<Pokemon> _pokemons = [];
+  int _currentPage = 0;
+  bool _isLoading = false;
+  bool _hasException = false;
+
+  bool get hasException => _hasException;
+
+  bool get isLoading => _isLoading;
+
+  int get currentPage => _currentPage;
 
   List<Pokemon> get pokemons => _pokemons;
 
-  List<Pokemon> get favorites => _favoritesBox.values.toList();
-
   Future<void> fetchPokemons({
     required List<PokemonGeneration> generations,
-    required List<PokemonType> pokemonTypes
+    required List<PokemonType> pokemonTypes,
+    int page = 0,
   }) async {
+    _currentPage = page;
+
     final Map<String, dynamic> where = {};
 
     if (generations.isNotEmpty) {
@@ -36,23 +43,21 @@ class PokemonProvider with ChangeNotifier {
       };
     }
 
-    final (result, exception) = await PokemonService.fetchList(where);
+    const int limitPerPage = 15;
 
-    hasException = exception != null;
+    _isLoading = true;
 
-    _pokemons = result ?? [];
+    final (result, exception) = await PokemonService.fetchList(
+      limit: limitPerPage,
+      offset: limitPerPage * _currentPage,
+      where: where,
+    );
 
-    notifyListeners();
-  }
+    _isLoading = false;
 
-  void toggleFavorite(Pokemon pokemon) {
-    pokemon.isFavorite = !pokemon.isFavorite;
+    _hasException = exception != null;
 
-    if (pokemon.isFavorite) {
-      _favoritesBox.put(pokemon.id, pokemon);
-    } else {
-      _favoritesBox.delete(pokemon.id);
-    }
+    _pokemons.addAll(result ?? []);
 
     notifyListeners();
   }
