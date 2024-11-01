@@ -20,6 +20,8 @@ class ThemeProvider with ChangeNotifier {
     } else {
       mode = ThemeMode.light;
     }
+
+    notifyListeners();
   }
 
   void setMode(ThemeMode themeMode) async {
