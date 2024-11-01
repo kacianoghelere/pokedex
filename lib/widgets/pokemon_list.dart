@@ -92,7 +92,7 @@ class _PokemonListState extends State<PokemonList> {
                 ),
               ),
           ),
-          const FilterChips(),
+          if (_showSearchBar) const FilterChips(),
           Expanded(
             child: widget.pokemons.isEmpty
               ? const NothingFoundIndicator()
