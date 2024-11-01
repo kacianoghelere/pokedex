@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/providers/favorite_pokemons_provider.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/widgets/error_indicator.dart';
@@ -61,14 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: SafeArea(
-        child: Consumer3<FilterProvider, PokemonProvider, FavoritePokemonsProvider>(
-          builder: (context, filterProvider, pokemonProvider, favoritesProvider, _) {
+        child: Consumer2<FilterProvider, PokemonProvider>(
+          builder: (context, filterProvider, pokemonProvider, _) {
             if (pokemonProvider.hasException) {
               return const ErrorIndicator();
             }
 
             final pokemons = filterProvider.showFavoritesOnly
-              ? favoritesProvider.favorites
+              ? pokemonProvider.favorites
               : pokemonProvider.pokemons;
 
             return PokemonList(

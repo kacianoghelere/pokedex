@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_type.dart';
@@ -9,6 +10,9 @@ class PokemonProvider with ChangeNotifier {
   int _currentPage = 0;
   bool _isLoading = false;
   bool _hasException = false;
+  final Box<Pokemon> _favoritesBox = Hive.box<Pokemon>('favorite_pokemons');
+
+  List<Pokemon> get favorites => _favoritesBox.values.toList();
 
   bool get hasException => _hasException;
 
@@ -75,6 +79,18 @@ class PokemonProvider with ChangeNotifier {
     _hasException = exception != null;
 
     _pokemons.addAll(result ?? []);
+
+    notifyListeners();
+  }
+
+  void toggleFavorite(Pokemon pokemon) {
+    pokemon.isFavorite = !pokemon.isFavorite;
+
+    if (pokemon.isFavorite) {
+      _favoritesBox.put(pokemon.id, pokemon);
+    } else {
+      _favoritesBox.delete(pokemon.id);
+    }
 
     notifyListeners();
   }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/providers/favorite_pokemons_provider.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/providers/theme_provider.dart';
@@ -26,7 +25,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => FavoritePokemonsProvider()),
         ChangeNotifierProvider(create: (_) => PokemonProvider()),
         ChangeNotifierProvider(create: (_) => FilterProvider()),
       ],
