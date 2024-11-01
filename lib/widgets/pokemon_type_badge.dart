@@ -16,10 +16,11 @@ class PokemonTypeBadge extends StatelessWidget {
 
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: hslColor.withLightness(0.3).toColor(),
+        color: hslColor.withLightness(0.4).toColor(),
         borderRadius: BorderRadius.circular(16.0)
       ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
             padding: const EdgeInsets.all(1.0),

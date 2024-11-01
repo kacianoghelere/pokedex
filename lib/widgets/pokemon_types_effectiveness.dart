@@ -30,7 +30,11 @@ class PokemonTypesEffectiveness extends StatelessWidget {
             return Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Expanded(child: PokemonTypeBadge(type: entry.type.name)),
+                Expanded(
+                  child: PokemonTypeBadge(
+                    type: entry.type.name
+                  )
+                ),
                 SizedBox(
                   height: 24,
                   width: 24,

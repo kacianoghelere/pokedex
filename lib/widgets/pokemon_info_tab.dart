@@ -30,11 +30,7 @@ class PokemonInfoTab extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  PokemonTypes(pokemon: pokemon),
-                ],
-              ),
+              child: PokemonTypes(pokemon: pokemon)
             ),
             PokemonBasicInfo(pokemon: pokemon),
             const SizedBox(height: 16),

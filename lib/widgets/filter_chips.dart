@@ -3,8 +3,7 @@ import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
-import 'package:pokedex/utils/enums/pokemon_type.dart';
-import 'package:pokedex/widgets/pokemon_type_icon.dart';
+import 'package:pokedex/widgets/pokemon_type_badge.dart';
 import 'package:provider/provider.dart';
 
 class FilterChips extends StatefulWidget {
@@ -137,7 +136,7 @@ class _FilterChipsState extends State<FilterChips> {
         color: Theme.of(context).scaffoldBackgroundColor,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
         child: Text(
           label,
           style: Theme.of(context).textTheme.labelSmall
@@ -155,11 +154,7 @@ class _FilterChipsState extends State<FilterChips> {
   }
 
   Widget _buildTypeChip(PokemonType pokemonType) {
-    return PokemonTypeImage(
-      PokemonTypeEnum.parse(pokemonType.type),
-      height: 24,
-      width: 24
-    );
+    return PokemonTypeBadge(type: pokemonType.type);
   }
 
   Widget _buildWrappedChips(List<Widget> children) {
