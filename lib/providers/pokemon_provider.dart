@@ -21,9 +21,18 @@ class PokemonProvider with ChangeNotifier {
   Future<void> fetchPokemons({
     required List<PokemonGeneration> generations,
     required List<PokemonType> pokemonTypes,
-    int page = 0,
+    String? searchText,
+    int? page,
   }) async {
-    _currentPage = page;
+    if (page != null) {
+      _currentPage = page;
+    }
+
+    if (page == 0) {
+      _pokemons.clear();
+
+      // notifyListeners();
+    }
 
     final Map<String, dynamic> where = {};
 
@@ -43,9 +52,17 @@ class PokemonProvider with ChangeNotifier {
       };
     }
 
+    if (searchText != null && searchText.isNotEmpty) {
+      where['name'] = {
+        '_regex': searchText
+      };
+    }
+
     const int limitPerPage = 15;
 
     _isLoading = true;
+
+    // notifyListeners();
 
     final (result, exception) = await PokemonService.fetchList(
       limit: limitPerPage,

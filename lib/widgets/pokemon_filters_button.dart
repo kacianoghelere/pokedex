@@ -133,7 +133,9 @@ class _PokemonFiltersButtonState extends State<PokemonFiltersButton> {
     Provider.of<PokemonProvider>(context, listen: false)
       .fetchPokemons(
         generations: filterProvider.selectedGenerations,
-        pokemonTypes: filterProvider.selectedTypes
+        pokemonTypes: filterProvider.selectedTypes,
+        searchText: filterProvider.searchText,
+        page: 0
       );
   }
 

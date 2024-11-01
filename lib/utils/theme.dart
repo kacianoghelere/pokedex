@@ -2,13 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/utils/extensions/color_extension.dart';
 
 class PokedexAppTheme {
-  static const primaryColor = Color.fromRGBO(204, 0, 0, 1);
+  static const primaryColor = Color(0xFFC20032);
 
   static final materialColor = primaryColor.toMaterialColor();
 
   static const poppinsTextStyle = TextStyle(fontFamily: 'Poppins');
 
   static final titleStyle = poppinsTextStyle.copyWith(
+    fontWeight: FontWeight.bold
+  );
+
+  static const labelStyle = TextStyle(
+    color: Colors.black45,
     fontWeight: FontWeight.bold
   );
 
@@ -19,6 +24,9 @@ class PokedexAppTheme {
     titleLarge: titleStyle,
     titleMedium: titleStyle,
     titleSmall: titleStyle,
+    labelLarge: labelStyle,
+    labelMedium: labelStyle,
+    labelSmall: labelStyle
   );
 
   static final lightTheme = ThemeData(
@@ -59,7 +67,7 @@ class PokedexAppTheme {
     textTheme: textTheme
   );
 
-  static const darkBackgroundColor = Color.fromRGBO(5, 5, 5, 1);
+  static const darkBackgroundColor = Color(0xFF050505);
 
   static final darkPrimaryColor = HSLColor.fromColor(primaryColor)
     .withLightness(0.25)
@@ -67,6 +75,10 @@ class PokedexAppTheme {
 
   static final darkTitleStyle = titleStyle.copyWith(
     color: Colors.white
+  );
+
+  static final darkLabelStyle = labelStyle.copyWith(
+    color: Colors.white54
   );
 
   static final darkTheme = ThemeData.dark(useMaterial3: true).copyWith(
@@ -107,6 +119,9 @@ class PokedexAppTheme {
       headlineLarge: poppinsTextStyle,
       headlineMedium: poppinsTextStyle,
       headlineSmall: poppinsTextStyle,
+      labelLarge: darkLabelStyle,
+      labelMedium: darkLabelStyle,
+      labelSmall: darkLabelStyle,
       titleLarge: darkTitleStyle,
       titleMedium: darkTitleStyle,
       titleSmall: darkTitleStyle,

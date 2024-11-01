@@ -13,7 +13,7 @@ query GetFiltersData {
 
 const String fetchPokemonsQuery = r'''
 query GetPokemons($where: pokemon_v2_pokemon_bool_exp, $limit: Int, $offset: Int) {
-  pokemon: pokemon_v2_pokemon(where: $where, limit: $limit, offset: $offset) {
+  pokemon: pokemon_v2_pokemon(where: $where, limit: $limit, offset: $offset, order_by: {id: asc}) {
     id
     name
     types: pokemon_v2_pokemontypes {

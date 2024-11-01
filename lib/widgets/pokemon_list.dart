@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pokedex/models/pokemon.dart';
+import 'package:pokedex/widgets/filter_chips.dart';
 import 'package:pokedex/widgets/nothing_found_indicator.dart';
 import 'package:pokedex/widgets/pokemon_card.dart';
 
@@ -25,6 +26,7 @@ class PokemonList extends StatefulWidget {
 }
 
 class _PokemonListState extends State<PokemonList> {
+  final _searchTextController = TextEditingController();
   final _scrollController = ScrollController();
   bool _showSearchBar = true;
   Timer? _textSearchDebouncer;
@@ -58,10 +60,6 @@ class _PokemonListState extends State<PokemonList> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.pokemons.isEmpty) {
-      return const NothingFoundIndicator();
-    }
-
     return NotificationListener<ScrollEndNotification>(
       onNotification: (notification) {
         if (notification.metrics.pixels == notification.metrics.maxScrollExtent) {
@@ -71,43 +69,51 @@ class _PokemonListState extends State<PokemonList> {
         return false;
       },
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            height: _showSearchBar ? 70.0 : 0.0,
-            child: _showSearchBar
-              ? Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    top: 16,
+            height: _showSearchBar ? 86.0 : 0.0,
+            child: !_showSearchBar
+              ? null
+              : Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  controller: _searchTextController,
+                  decoration: const InputDecoration(
+                    hintText: 'Search by name',
+                    prefixIcon: Icon(Icons.search),
                   ),
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      hintText: 'Search by name or ID',
-                      prefixIcon: Icon(Icons.search),
-                    ),
-                    onChanged: _onSearchByText,
-                    onSubmitted: _onSearchByText,
-                  ),
-                )
-              : null,
+                  textAlignVertical: TextAlignVertical.center,
+                  onChanged: _onSearchByText,
+                  onSubmitted: _onSearchByText,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ),
           ),
+          const FilterChips(),
           Expanded(
-            child: ListView.builder(
-              addRepaintBoundaries: true,
-              controller: _scrollController,
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              shrinkWrap: widget.shrinkWrap,
-              prototypeItem: PokemonCard(pokemon: widget.pokemons.first),
-              itemCount: widget.pokemons.length,
-              itemBuilder: (context, index) {
-                return PokemonCard(pokemon: widget.pokemons[index]);
-              }
-            ),
+            child: widget.pokemons.isEmpty
+              ? const NothingFoundIndicator()
+              : _buildList()
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildList() {
+    return ListView.builder(
+      addRepaintBoundaries: true,
+      controller: _scrollController,
+      padding: const EdgeInsets.only(bottom: 16.0),
+      shrinkWrap: widget.shrinkWrap,
+      prototypeItem: PokemonCard(pokemon: widget.pokemons.first),
+      itemCount: widget.pokemons.length,
+      itemBuilder: (context, index) {
+        return PokemonCard(pokemon: widget.pokemons[index]);
+      }
     );
   }
 }

@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     pokemonProvider.fetchPokemons(
       generations: filterProvider.selectedGenerations,
       pokemonTypes: filterProvider.selectedTypes,
+      searchText: filterProvider.searchText,
       page: page
     );
   }
@@ -75,8 +76,10 @@ class _HomeScreenState extends State<HomeScreen> {
               onEdgeReached: () {
                 _fetchPokemons(page: pokemonProvider.currentPage + 1);
               },
-              onSearchTextChanged: (String text) {
-                debugPrint("Searching $text");
+              onSearchTextChanged: (String searchText) {
+                filterProvider.searchText = searchText;
+
+                _fetchPokemons(page: 0);
               },
             );
           }
