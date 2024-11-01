@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/utils/extensions/color_extension.dart';
 
 class PokedexAppTheme {
-  static const primaryColor = Color(0xFFC20032);
+  static const primaryColor = Color.fromRGBO(204, 0, 0, 1);
 
   static final materialColor = primaryColor.toMaterialColor();
 
