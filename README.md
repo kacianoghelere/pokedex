@@ -18,3 +18,5 @@ With this app, Pokémon fans can delve into detailed stats and evolutions, devel
 
 # Showcase
 [Screen_recording_20241101_134103.webm](https://github.com/user-attachments/assets/c3b66e6c-e943-42e1-b7df-69b714540050)
+
+![Screenshots](https://github.com/user-attachments/assets/7f0ed6d5-04f0-4e34-b682-c8a943039c8b)
