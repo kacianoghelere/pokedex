@@ -5,7 +5,7 @@ import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/models/pokemon_stat.dart';
 import 'package:pokedex/providers/theme_provider.dart';
 import 'package:pokedex/utils/extensions/color_extension.dart';
-import 'package:pokedex/widgets/section_title.dart';
+import 'package:pokedex/features/pokemon_details/widgets/section_title.dart';
 import 'package:provider/provider.dart';
 
 class PokemonStats extends StatelessWidget {
@@ -41,7 +41,7 @@ class PokemonStats extends StatelessWidget {
                 child: LinearPercentIndicator(
                   barRadius: const Radius.circular(16),
                   backgroundColor: isDarkTheme
-                    ? const Color.fromRGBO(15, 15, 15, 1)
+                    ? const Color.fromRGBO(20, 20, 20, 1)
                     : const Color.fromRGBO(245, 245, 245, 1),
                   center: Text(
                     stat.value.toString(),

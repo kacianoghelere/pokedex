@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon_details.dart';
-import 'package:pokedex/widgets/section_title.dart';
+import 'package:pokedex/features/pokemon_details/widgets/section_title.dart';
 
 class PokemonBasicInfo extends StatefulWidget {
   final PokemonDetails pokemon;

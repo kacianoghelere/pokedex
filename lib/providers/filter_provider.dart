@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon_type.dart';
-import 'package:pokedex/models/query_parameters.dart';
 import 'package:pokedex/utils/extensions/list_extension.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
 
@@ -18,12 +17,6 @@ class FilterProvider with ChangeNotifier {
   List<PokemonType> get selectedTypes => _selectedTypes;
 
   bool get showFavoritesOnly => _showFavoritesOnly;
-
-  QueryParameters get queryParameters => QueryParameters(
-    searchText: _searchText,
-    generations: _selectedGenerations,
-    types: _selectedTypes
-  );
 
   Future<void> fetchFilterData() async {
     _selectedGenerations.clear();

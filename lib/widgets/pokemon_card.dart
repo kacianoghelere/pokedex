@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
-import 'package:pokedex/screens/pokemon_details_screen.dart';
+import 'package:pokedex/features/pokemon_details/screens/pokemon_details_screen.dart';
 import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/widgets/pokemon_sprite.dart';
 import 'package:pokedex/widgets/pokemon_types.dart';

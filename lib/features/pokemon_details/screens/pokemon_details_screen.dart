@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_header_background.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/providers/theme_provider.dart';
-import 'package:pokedex/utils/helpers/pokemon_types_helper.dart';
 import 'package:pokedex/utils/services/pokemon_service.dart';
 import 'package:pokedex/widgets/error_indicator.dart';
-import 'package:pokedex/widgets/pokemon_info_tab.dart';
-import 'package:pokedex/widgets/pokemon_evolutions_tab.dart';
-import 'package:pokedex/widgets/pokemon_moves_tab.dart';
-import 'package:pokedex/widgets/pokemon_sprite.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_info_tab.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_evolutions_tab.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_moves_tab.dart';
 import 'package:pokedex/widgets/rotating_logo.dart';
-import 'package:pokedex/widgets/toggle_favorite_pokemon_button.dart';
+import 'package:pokedex/features/pokemon_details/widgets/toggle_favorite_pokemon_button.dart';
 import 'package:provider/provider.dart';
 
 class PokemonDetailsScreen extends StatelessWidget {
@@ -59,7 +58,7 @@ class PokemonDetailsScreen extends StatelessWidget {
         ToggleFavoritePokemonButton(pokemon: pokemon)
       ],
       flexibleSpace: FlexibleSpaceBar(
-        background: _HeaderBackground(pokemon: pokemon),
+        background: PokemonHeaderBackground(pokemon: pokemon),
         centerTitle: true,
         title: ConstrainedBox(
           constraints: BoxConstraints(
@@ -184,37 +183,6 @@ class PokemonDetailsScreen extends StatelessWidget {
 
   HSLColor get hslColor {
     return HSLColor.fromColor(pokemon.typeColor);
-  }
-}
-
-class _HeaderBackground extends StatelessWidget {
-  final Pokemon pokemon;
-
-  const _HeaderBackground({required this.pokemon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Positioned(
-          child: Image.asset( // TODO: Add sprite zoom
-            PokemonTypesHelper.getTypeBackground(pokemon.mainType.type),
-            width: MediaQuery.sizeOf(context).width,
-            height: 500,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 48.0),
-            child: PokemonSprite(
-              pokemon: pokemon,
-              size: 240,
-            )
-          ),
-        )
-      ],
-    );
   }
 }
 

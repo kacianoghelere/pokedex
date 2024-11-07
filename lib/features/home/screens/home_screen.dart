@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/providers/filter_provider.dart';
 import 'package:pokedex/providers/pokemon_provider.dart';
 import 'package:pokedex/widgets/error_indicator.dart';
-import 'package:pokedex/widgets/pokemon_list.dart';
-import 'package:pokedex/widgets/pokemon_filters_button.dart';
-import 'package:pokedex/widgets/toggle_theme_button.dart';
+import 'package:pokedex/features/home/widgets/pokemon_list.dart';
+import 'package:pokedex/features/home/widgets/pokemon_filters_button.dart';
+import 'package:pokedex/features/home/widgets/toggle_theme_button.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pokedex/models/pokemon.dart';
-import 'package:pokedex/widgets/filter_chips.dart';
+import 'package:pokedex/features/home/widgets/filter_chips.dart';
 import 'package:pokedex/widgets/nothing_found_indicator.dart';
 import 'package:pokedex/widgets/pokemon_card.dart';
 
@@ -26,6 +26,7 @@ class PokemonList extends StatefulWidget {
 }
 
 class _PokemonListState extends State<PokemonList> {
+  // TODO: Listen to provider changes on searchText to clear the TextInput data
   final _searchTextController = TextEditingController();
   final _scrollController = ScrollController();
   bool _showSearchBar = true;

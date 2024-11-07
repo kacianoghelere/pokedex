@@ -1,9 +1,9 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pokedex/graphql/queries.dart';
 import 'package:pokedex/models/pokemon_generation.dart';
 import 'package:pokedex/models/pokemon.dart';
 import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/models/pokemon_type.dart';
+import 'package:pokedex/utils/graphql/queries.dart';
 
 typedef _Response<T extends Object> = (T? result, Exception? exception);
 

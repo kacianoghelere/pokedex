@@ -106,7 +106,7 @@ class PokedexAppTheme {
       fillColor: const Color.fromARGB(255, 25, 25, 25),
       prefixIconColor: const Color.fromARGB(255, 100, 100, 100),
       hintStyle: const TextStyle(
-        color: Color.fromARGB(255, 50, 50, 50)
+        color: Color.fromARGB(255, 75, 75, 75)
       ),
     ),
     listTileTheme: const ListTileThemeData(

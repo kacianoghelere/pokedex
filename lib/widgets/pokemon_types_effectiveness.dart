@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon_details.dart';
 import 'package:pokedex/utils/enums/pokemon_type_effectiveness.dart';
 import 'package:pokedex/widgets/pokemon_type_badge.dart';
-import 'package:pokedex/widgets/section_title.dart';
+import 'package:pokedex/features/pokemon_details/widgets/section_title.dart';
 
 class PokemonTypesEffectiveness extends StatelessWidget {
   final PokemonDetails pokemon;

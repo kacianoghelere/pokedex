@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/models/pokemon_details.dart';
-import 'package:pokedex/widgets/pokemon_abilities.dart';
-import 'package:pokedex/widgets/pokemon_basic_info.dart';
-import 'package:pokedex/widgets/pokemon_stats.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_abilities.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_basic_info.dart';
+import 'package:pokedex/features/pokemon_details/widgets/pokemon_stats.dart';
 import 'package:pokedex/widgets/pokemon_types.dart';
 import 'package:pokedex/widgets/pokemon_types_effectiveness.dart';
 
