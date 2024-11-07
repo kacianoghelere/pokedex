@@ -58,7 +58,7 @@ class PokemonProvider with ChangeNotifier {
 
     if (searchText != null && searchText.isNotEmpty) {
       where['name'] = {
-        '_regex': searchText
+        '_regex': searchText.toLowerCase()
       };
     }
 
